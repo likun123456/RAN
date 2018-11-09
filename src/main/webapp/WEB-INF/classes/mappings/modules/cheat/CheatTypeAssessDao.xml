@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CheatTypeAssessDao">
+    
+	<select id="queryList" resultType="CheatTypeAssess">
+<![CDATA[SELECT 
+            t1.recordtime,
+            t1.timeH AS timeH,
+            t1.timeD AS timeD,
+            t1.timeM AS timeM,
+			t2.CheatCaseChinese AS cheatCaseChinese,
+			SUM(t1.freetotal) AS cheatFlow,
+			count(t1.servedMSISDN) AS counts,
+			t1.proxyIp
+		 FROM
+			${netid}_cheat_data_report t1,
+			t_cheat_chinese t2
+		 WHERE
+		    t1.CheatCase = t2.CheatCase AND
+			t1.recordtime >= #{startTime} AND t1.recordtime< #{endTime}			
+		 GROUP BY 
+		    t1.proxyIp,
+		    t1.time${timeGranularity},
+		    t1.CheatCase
+		 ORDER BY
+		    t1.recordtime
+        ]]>
+	</select>
+	
+	<select id="queryCheatUsersList" resultType="CheatTypeAssess">
+<![CDATA[SELECT 
+            t.recordtime AS recordtime,
+            t.servedIMSI AS imsi,
+            t.servedMSISDN AS msisdn,
+            t.ratType AS ratType,
+			t.freetotal AS freeTotal,
+			t.total AS total,
+			t.percent AS percent,
+			t.proxyIp AS proxyIp,
+			t1.CheatCaseChinese AS cheatCaseChinese
+		 FROM
+			${netid}_cheat_data_report t,
+			t_cheat_chinese t1 ]]>
+	<choose>
+		<when test="proxyip == null">
+            <choose>
+				<when test="_timeX&lt;3">
+				    WHERE t.recordtime = #{recordtime} AND t.CheatCase = t1.CheatCase AND t.timeD = #{timeD}
+				</when>
+				<otherwise>
+	    <![CDATA[   WHERE t.time${timeGranularity} = #{timeX} AND t.CheatCase = t1.CheatCase ]]>
+				</otherwise>
+			</choose>	
+		</when>
+		<otherwise>
+		    <choose>
+				<when test="_timeX&lt;3">
+				    WHERE t.proxyIp = #{proxyip} AND t.recordtime = #{recordtime} AND t.CheatCase = t1.CheatCase 
+				    AND t.timeD = #{timeD}
+				</when>
+				<otherwise>
+	    <![CDATA[	WHERE t.proxyIp = #{proxyip} AND t.time${timeGranularity} = #{timeX} AND t.CheatCase = t1.CheatCase ]]>
+				</otherwise>
+			</choose>	
+		</otherwise>
+	</choose>	
+	     ORDER BY t.freetotal DESC
+	</select>
+</mapper>

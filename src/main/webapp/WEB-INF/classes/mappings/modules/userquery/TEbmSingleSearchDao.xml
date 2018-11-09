@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TEbmSingleSearchDao">
+    
+	<sql id="tEbmSingleSearchColumns">
+		a.id AS "id",
+		a.date AS "date",
+		a.ntype AS "ntype",
+		a.event_id AS "eventId",
+		a.event_result AS "eventResult",
+		a.imsi AS "imsi",
+		a.msisdn AS "msisdn"
+	</sql>
+	
+	<sql id="tEbmSingleSearchJoins">
+	</sql>
+    
+	<select id="get" resultType="TEbmSingleSearch">
+		SELECT 
+			<include refid="tEbmSingleSearchColumns"/>
+		FROM t_ebm_single_search a
+		<include refid="tEbmSingleSearchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TEbmSingleSearch">
+		SELECT 
+			<include refid="tEbmSingleSearchColumns"/>
+		FROM t_ebm_single_search a
+		<include refid="tEbmSingleSearchJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+    <update id="truncateEbmSingleSearchTable">
+        truncate table t_ebm_single_search
+    </update>	
+    
+    <insert id="insertEbmSingleSearchTable" parameterType="java.util.List">
+         INSERT INTO t_ebm_single_search (DATE,NTYPE,EVENT_ID,EVENT_RESULT,IMSI,MSISDN,CC,SCC,ECI,EBMLOG) VALUES 
+         <foreach collection="list" item="item" index="index" separator=",">  
+          (#{item.date},
+           #{item.ntype},
+           #{item.eventId},
+           #{item.eventResult},
+           #{item.imsi},
+           #{item.msisdn},
+           #{item.cc},
+           #{item.scc},
+           #{item.eci},
+           #{item.sb})
+         </foreach>  
+    </insert>
+    
+    <select id="queryEbmSingleSearchTable" resultType="TEbmSingleSearch" >
+      SELECT t.id,t.date,t.ntype,t.event_id,t.event_result,t.imsi,t.msisdn,t.cc,t.scc,t.eci
+      FROM t_ebm_single_search t
+      <where> t.id > 0
+         <if test="eventType != null and eventType != ''">
+			  AND t.event_id = #{eventType}
+		 </if>
+		 <if test="nType != null and nType != ''">
+			  AND t.ntype = #{nType}
+		 </if>
+		 <if test="eventResult != null and eventResult != ''">
+			  AND t.event_result = #{eventResult}
+		 </if>
+      </where>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY t.date 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+    
+    <select id="queryListCount" resultType="Integer" >
+     SELECT count(*) FROM t_ebm_single_search
+     <if test="eventType != null and eventType != ''">
+			  WHERE event_id = #{eventType}
+		 </if>
+	</select>
+	
+	 <select id="queryEbmLogById" resultType="String" >
+	      SELECT t.ebmlog
+	      FROM t_ebm_single_search t
+	      WHERE t.id = #{id}
+	</select>
+	
+	<select id="queryCcdes" resultType="String" >
+	      SELECT t.cc_description
+	      FROM t_ebmlog_xml_info t
+	      WHERE t.cc = #{cc} GROUP BY t.cc
+	</select>
+	
+	<select id="querySccdesAndAction" resultType="TEbmSingleSearch" >
+	      SELECT t.scc_description AS "sccdes",t.action,t.domain
+	      FROM t_ebmlog_xml_info t
+	      WHERE t.scc = #{scc} GROUP BY t.scc
+	</select>
+</mapper>

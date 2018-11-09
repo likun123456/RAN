@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CaptureParamConfigDao">
+    
+	<sql id="captureParamConfigColumns">
+		a.id AS "id",
+		a.freeflowFilter AS "freeflowFilter",
+		a.freeflow AS "freeflow",
+		a.freepercent AS "freePercent",
+		a.checkUserCount AS "checkUserCount",
+		a.catchPackageUserCount AS "catchPackageUserCount"
+	</sql>
+    
+	<select id="queryConfig" resultType="CaptureParamConfig">
+		SELECT 
+			<include refid="captureParamConfigColumns"/>
+		FROM t_config a
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO t_config(
+			freeflowFilter,
+			freeflow,
+			freepercent,
+			checkUserCount,
+			catchPackageUserCount
+		) VALUES (
+			#{freeflowFilter},
+			#{freeflow},
+			#{freePercent},
+			#{checkUserCount},
+			#{catchPackageUserCount}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_config SET 	
+			freeflowFilter = #{freeflowFilter},
+			freeflow = #{freeflow},
+			freepercent = #{freePercent},
+			checkUserCount = #{checkUserCount},
+			catchPackageUserCount = #{catchPackageUserCount}
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CheatReportDao">
+    
+	<sql id="cheatReportColumns">
+		a.id AS "id",
+		a.cheatcase AS "cheatCase",
+		a.reportname AS "reportName",
+		a.inused AS "inused"
+	</sql>
+	
+	<sql id="cheatReportJoins">
+	</sql>
+    
+	<select id="get" resultType="CheatReport">
+		SELECT 
+			<include refid="cheatReportColumns"/>
+		FROM t_cheat_report a
+		<include refid="cheatReportJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CheatReport">
+		SELECT 
+			<include refid="cheatReportColumns"/>
+		FROM t_cheat_report a
+		<include refid="cheatReportJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CheatReport">
+		SELECT 
+			<include refid="cheatReportColumns"/>
+		FROM t_cheat_report a
+		<include refid="cheatReportJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cheat_report(
+			cheatcase,
+			reportname,
+			inused
+		) VALUES (
+			#{cheatCase},
+			#{reportName},
+			#{inused}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cheat_report SET 	
+			cheatcase = #{cheatCase},
+			reportname = #{reportName},
+			inused = #{inused}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cheat_report
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryCheatReport" resultType="java.util.Map" statementType="STATEMENT">
+		select * from ${netId}_report_${reportName}${suffix} t where t.recordtime in (${times}) order by recordtime desc 
+	</select>
+	
+	
+</mapper>

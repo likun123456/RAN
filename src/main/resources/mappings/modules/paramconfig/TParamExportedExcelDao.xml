@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.TParamExportedExcelDao">
+    
+	<sql id="tParamExportedExcelColumns">
+		a.id AS "id",
+		a.path AS "path",
+		a.datetime AS "datetime"
+	</sql>
+	
+	<sql id="tParamExportedExcelJoins">
+	</sql>
+    
+	<select id="get" resultType="TParamExportedExcel">
+		SELECT 
+			<include refid="tParamExportedExcelColumns"/>
+		FROM t_param_exported_excel a
+		<include refid="tParamExportedExcelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TParamExportedExcel">
+		SELECT 
+			<include refid="tParamExportedExcelColumns"/>
+		FROM t_param_exported_excel a
+		<include refid="tParamExportedExcelJoins"/>
+		<if test="startTime!=null and startTime!=''">
+	<![CDATA[	  WHERE a.datetime >= #{startTime}    ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+		      <if test="startTime==null or startTime==''">
+	<![CDATA[	  WHERE a.datetime <= #{endTime}  ]]>
+		      </if>
+	<![CDATA[     AND a.datetime <=	#{endTime}  ]]>      
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				order by datetime desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TParamExportedExcel">
+		SELECT 
+			<include refid="tParamExportedExcelColumns"/>
+		FROM t_param_exported_excel a
+		<include refid="tParamExportedExcelJoins"/>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

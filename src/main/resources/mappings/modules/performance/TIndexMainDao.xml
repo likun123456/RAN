@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TIndexMainDao">
+    
+	<sql id="tStatisticsColumns">
+		a.dateTime AS "datetime"
+	</sql>
+    
+	<select id="getDateTime" resultType="String">
+		SELECT 
+			<include refid="tStatisticsColumns"/>
+		from t_statistics_${tableName} a ORDER BY a.dateTime desc LIMIT 1
+	</select>
+	
+	<sql id="tResultColumns">
+		a.NAME AS "kpiName",
+		a.countertype AS "countertype",
+		b.result AS "result",
+		b.kpi AS "kpi"
+	</sql>
+	
+	<select id="queryList" resultType="TIndexMain">
+		select
+	    	<include refid="tResultColumns"/>
+		 from (SELECT
+			kpi,
+			SUM(result)/
+			(count(result)) as result
+		FROM
+			t_statistics_${tableName}
+		WHERE
+			netID IN (
+				SELECT
+					t_newnetelement.f_id
+				FROM
+					t_newnetelement
+				WHERE
+					t_newnetelement.f_nid = #{tpoolId}
+			)
+		AND KPI IN 
+		<foreach item="item" index="index" collection="kpiList" open="(" separator="," close=")">  
+             #{item}  
+        </foreach>
+		and dateTime=#{dateTime} and dateTime between DATE_ADD('2018-04-25 13:44:00',INTERVAL -#{timeInterval} hour) and '2018-04-25 13:46:00'
+		GROUP BY
+			kpi) b,t_formula a where a.id=b.kpi
+	</select>
+	
+	<sql id="tResultChartColumns">
+		a.NAME AS "kpiName",
+		a.countertype AS "countertype",
+		b.result AS "result",
+		b.kpi AS "kpi",
+		b.dateTime AS "datetime"
+	</sql>
+	<select id="queryChartList" resultType="TIndexMain">
+	    SELECT
+			<include refid="tResultChartColumns"/>
+		FROM
+			(
+				SELECT
+					kpi,
+					SUBSTRING(dateTime,12,16) AS dateTime,
+					SUM(result)/
+					(count(result)) AS result
+				FROM
+					t_statistics_${tableName}
+				WHERE
+					netID IN (
+						SELECT
+							t_newnetelement.f_id
+						FROM
+							t_newnetelement
+						WHERE
+							t_newnetelement.f_nid = #{tpoolId}
+					)
+				AND KPI =#{kpi}
+				AND dateTime BETWEEN DATE_ADD('2018-04-25 13:44:00',INTERVAL -#{timeInterval} hour) and '2018-04-25 13:46:00'
+				GROUP BY
+					dateTime
+			) b,
+			t_formula a
+		WHERE
+			a.id = b.kpi ORDER BY b.dateTime;
+	</select>
+	
+	<select id="queryNetList" resultType="TIndexMain">
+		select
+	    	<include refid="tResultColumns"/>
+		 from (SELECT
+			kpi,
+			result
+		FROM
+			t_statistics_${tableName}
+		WHERE
+			netID = #{netId}
+		AND KPI IN 
+		<foreach item="item" index="index" collection="kpiList" open="(" separator="," close=")">  
+             #{item}  
+        </foreach>
+		and dateTime=#{dateTime} and dateTime between DATE_ADD('2018-04-25 13:44:00',INTERVAL -#{timeInterval} hour) and '2018-04-25 13:46:00'
+		GROUP BY
+			kpi) b,t_formula a where a.id=b.kpi
+	</select>
+	
+	<select id="queryNetChartList" resultType="TIndexMain">
+	    SELECT
+			<include refid="tResultChartColumns"/>
+		FROM
+			(
+				SELECT
+					kpi,
+					SUBSTRING(dateTime,12,16) AS dateTime,
+				    result
+				FROM
+					t_statistics_${tableName}
+				WHERE
+				netID =#{netId}
+				AND KPI =#{kpi}
+				AND dateTime BETWEEN DATE_ADD('2018-04-25 13:44:00',INTERVAL -#{timeInterval} hour) and '2018-04-25 13:46:00'
+				GROUP BY
+					dateTime
+			) b,
+			t_formula a
+		WHERE
+			a.id = b.kpi ORDER BY b.dateTime;
+	</select>
+</mapper>

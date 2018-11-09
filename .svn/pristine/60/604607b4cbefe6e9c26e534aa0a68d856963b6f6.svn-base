@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TEdgesDao">
+    
+	<sql id="visEdgesColumns">
+		a.id AS "id",
+		a.roomid AS "roomid",
+		a.fromEqu AS "fromEqu",
+		a.fromEquIp AS "fromEquIp",
+		a.toEqu AS "toEqu",
+		a.toEquIp AS "toEquIp",
+		b.oid AS "fromOid",
+		b.type AS "fromNodeType",
+    	c.oid AS "toOid",
+    	c.type AS "toNodeType",
+		d.`name` AS "roomName"
+	</sql>
+	
+	<sql id="visEdgesJoins">
+		left join t_vis_nodes b on a.fromEqu = b.id
+	 	left join t_vis_nodes c on a.toEqu = c.id
+	 	left join t_computerroom d on a.roomId = d.id
+	</sql>
+    
+	<select id="get" resultType="TEdges">
+		SELECT 
+			<include refid="visEdgesColumns"/>
+		FROM t_vis_edges a
+		<include refid="visEdgesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TEdges">
+		SELECT 
+			<include refid="visEdgesColumns"/>
+		FROM t_vis_edges a
+		<include refid="visEdgesJoins"/>
+		<where>
+			<if test="roomid != null and roomid != ''">
+				AND a.roomid =#{roomid}
+			</if>
+			<if test="fromEqu != null and fromEqu != ''">
+				AND a.fromEqu =#{fromEqu}
+			</if>
+			<if test="toEqu != null and toEqu != ''">
+				AND a.toEqu =#{toEqu}
+			</if>
+			<if test="fromEquIp != null and fromEquIp != ''">
+				AND a.fromEquIp LIKE concat('%',#{fromEquIp},'%')
+			</if>
+			<if test="toEquIp != null and toEquIp != ''">
+				AND a.toEquIp LIKE concat('%',#{toEquIp},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TEdges">
+		SELECT 
+			<include refid="visEdgesColumns"/>
+		FROM t_vis_edges a
+		<include refid="visEdgesJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_edges(
+			roomid,
+			fromEqu,
+			fromEquIp,
+			toEqu,
+			toEquIp
+		) VALUES (
+			#{roomid},
+			#{fromEqu},
+			#{fromEquIp},
+			#{toEqu},
+			#{toEquIp}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_edges SET
+			fromEquIp = #{fromEquIp},
+			toEquIp = #{toEquIp}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_edges
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteFromOrToNode">
+		DELETE FROM t_vis_edges
+		WHERE fromEqu = #{fromEqu} OR toEqu = #{toEqu}
+	</update>
+	
+	<update id="deleteFromAndToNode">
+		DELETE FROM t_vis_edges
+		WHERE (fromEqu = #{fromEqu} AND toEqu = #{toEqu}) OR (fromEqu = #{toEqu} AND toEqu = #{fromEqu})
+	</update>
+	
+</mapper>

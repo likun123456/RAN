@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TEbmlogConfigDao">
+   <insert id="insertEbmXml" parameterType="java.util.List">
+         INSERT INTO t_ebmlog_xml_info (netid,cc,scc,cc_description,scc_description,action,domain) VALUES 
+         <foreach collection="ebmxmllist" item="item" index="index" separator=",">  
+          (#{netid},
+           #{item.cc},
+           #{item.scc},
+           #{item.ccdes},
+           #{item.sccdes},
+           #{item.action},
+           #{item.domain})
+         </foreach> 
+    </insert>
+    <insert id="insertImeitacTranslate" parameterType="java.util.Map">
+         INSERT INTO t_imeitac_translate (IMEITAC,PhoneName) VALUES 
+         <foreach collection="imeiTacmap" item="entryTemp" index="index" separator=",">  
+          (#{index},
+           #{entryTemp})
+         </foreach>  
+    </insert>
+    <update id="deleteImeitac">
+         truncate table t_imeitac_translate
+    </update>
+    <update id="deleteEbmlogXml">
+         delete from t_ebmlog_xml_info where netid = #{netid}
+    </update>
+</mapper>

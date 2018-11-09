@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CheatHistoryDao">
+    
+	<sql id="cheatHistoryColumns">
+		a.recordtime AS "recordTime",
+		a.servedimsi AS "servedImsi",
+		a.servedmsisdn AS "servedMsisdn",
+		a.rattype AS "ratType",
+		a.freetotal AS "freeTotal",
+		a.total AS "total",
+		a.percent AS "percent",
+		a.timeh AS "timeh",
+		a.status AS "status",
+		a.cheatcase AS "cheatCase",
+		a.ip AS "ip"
+	</sql>
+	
+	<sql id="cheatHistoryJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="CheatHistory">
+		SELECT 
+			<include refid="cheatHistoryColumns"/>
+		FROM ${netid}_cdrsubpercentv2 a
+		<include refid="cheatHistoryJoins"/>
+		<where>
+			 1=1
+			<if test="status!=null">
+			    AND a.status = #{status}
+			</if>
+			<if test="beginDate!=null and beginDate!=''">
+			   <![CDATA[ AND a.recordtime >= #{beginDate} ]]>
+			</if>
+			<if test="endDate!=null and endDate!=''" >
+			    <![CDATA[ AND a.recordtime <= #{endDate} ]]>
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER by a.recordTime DESC,a.percent DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="queryListByImsi" resultType="CheatHistory">
+		<![CDATA[
+		SELECT
+			c.ratingGroup,r.name,convert(SUM(c.dataUp)/1024,decimal(10,2)) AS dataUp,
+			convert(SUM(c.dataDown)/1024,decimal(10,2)) AS dataDown,convert((SUM(c.dataUp)+SUM(c.dataDown))/1024,decimal(10,2)) AS total
+		FROM ${netid}_${date}_cdrsub c,t_ratinggroup_config r
+		WHERE c.recordtime >= #{beginDate}
+			AND c.recordtime <= #{endDate}
+			AND c.servedIMSI = #{imsi}
+			AND c.ratingGroup = r.ratingGroup
+			GROUP BY c.ratingGroup ORDER BY total DESC 
+		]]>
+		
+	</select>
+	
+	<select id="queryFlowList" resultType="CheatHistory">
+		<![CDATA[
+		SELECT t.ip,convert(t.freetotal/1024,decimal(10,2)) as freeTotal,convert((t.total-t.freetotal)/1024,decimal(10,2)) as percent from ${netid}_${date}_cdrsubpercentv2 t 
+		Where t.servedIMSI = #{imsi} and t.recordtime = #{datetime} and t.cheatCase=#{cheatCase}
+		]]>
+		
+	</select>
+	
+	<select id="queryCapName" resultType="String">
+		select t.capname from t_cap t 
+		where t.finishcatchpackagetime = #{datetime} and t.imsi = #{imsi} and t.ip = #{ip}
+	</select>
+	
+</mapper>

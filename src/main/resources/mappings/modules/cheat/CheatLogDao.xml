@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CheatLogDao">
+    
+	<sql id="cheatLogColumns">
+		a.netid AS "netid",
+		a.date AS "date",
+		a.datetime AS "dateTime",
+		a.tempstamp AS "tempstamp",
+		a.cheatcase AS "cheatCase",
+		a.cheatnote AS "cheatNote",
+		a.imsi AS "imsi",
+		a.ip AS "ip",
+		a.cheatstate AS "cheatState"
+	</sql>
+	
+	<sql id="cheatLogJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="CheatLog">
+		SELECT 
+			<include refid="cheatLogColumns"/>
+		FROM t_cheat_log a
+		<include refid="cheatLogJoins"/>
+		<where>
+			1=1
+			<if test="netid!=null">
+			    AND a.netid = #{netid}
+			</if>
+			<if test="imsi!=null and imsi!=''">
+			   AND a.imsi = #{imsi}
+			</if>
+			<if test="dateTime!=null and dateTime!=''" >
+			    AND a.datetime = #{dateTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CheatLog">
+		SELECT 
+			<include refid="cheatLogColumns"/>
+		FROM t_cheat_log a
+		<include refid="cheatLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+</mapper>

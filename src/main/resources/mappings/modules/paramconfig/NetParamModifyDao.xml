@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.NetParamModifyDao">
+    
+	<sql id="paramCollectConfigColumns">
+		
+	</sql>
+    
+	<select id="searchSingleNet" resultType="ParamData">
+		select 
+			m.paramid,m.cnname,m.name,m.version,m.type,m.description,m.endescription,m.applyrange,m.valuerange,
+			m.memo,m.defaultvalue,m.suggestvalue,d.paramvalue,d.viewcmd,d.modcmd, d.netid 
+			from t_param_data d left join t_param_dictionary_${netType} m on m.paramid = d.paramid  and m.version=d.version 
+			where d.netid=#{netId} and d.fetchdate=#{date} 
+			<if test="paramtype != null and paramtype != ''">
+				and  m.type=#{paramtype}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				 and (m.name=#{keyword} or m.paramid like '%${keyword}%' or m.cnname like '%${keyword}%' or m.name like '%${keyword}%' or m.type like '%${keyword}%' or m.description like '%${keyword}%' or m.endescription like '%${keyword}%' 
+				 or m.applyrange like '%${keyword}%' or m.valuerange like '%${keyword}%' or 
+				 m.memo like '%${keyword}%' or m.defaultvalue like '%${keyword}%' or m.suggestvalue like '%${keyword}%' or d.paramvalue like '%${keyword}%' or d.viewcmd like '%${keyword}%' or d.modcmd like '%${keyword}%') 
+			</if>
+			<if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 	</if>
+	</select>
+	
+	<select id="searchSingleNetCount" resultType="Integer">
+		select 
+			count(*) 
+			from t_param_data d left join t_param_dictionary_${netType} m on m.paramid = d.paramid  and m.version=d.version 
+			where d.netid=#{netId} and d.fetchdate=#{date} 
+			<if test="paramtype != null and paramtype != ''">
+				and  m.type=#{paramtype}
+			</if>
+			<if test="keyword != null and keyword != ''">
+ 				and (m.name=#{keyword} or m.paramid like '%${keyword}%' or m.cnname like '%${keyword}%' or m.name like '%${keyword}%' or m.type like '%${keyword}%' or m.description like '%${keyword}%' or m.endescription like '%${keyword}%' 
+				 or m.applyrange like '%${keyword}%' or m.valuerange like '%${keyword}%' or 
+				 m.memo like '%${keyword}%' or m.defaultvalue like '%${keyword}%' or m.suggestvalue like '%${keyword}%' or d.paramvalue like '%${keyword}%' or d.viewcmd like '%${keyword}%' or d.modcmd like '%${keyword}%') 
+			</if>
+	</select>
+	
+	
+	<update id="saveParamStatus" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO t_param_cmd_status(
+			netid,
+			cmdcontent,
+			executetype,
+			executetime,
+			executestatus,
+			modcmd
+		) VALUES (
+			#{netid},
+			#{cmdcontent},
+			#{executetype},
+			#{executetime},
+			#{executestatus},
+			#{modcmd}
+		)
+	</update>
+	
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.ParamCollectConfigDao">
+    
+	<sql id="paramCollectConfigColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.collecttime AS "collecttime",
+		a.biztype AS "biztype"
+	</sql>
+    
+	<select id="queryParamConfig" resultType="ParamCollectConfig">
+		SELECT 
+			<include refid="paramCollectConfigColumns"/>
+		FROM t_param_collect_config a 
+		where biztype = 1
+	</select>
+	
+	<select id="queryAutoCheckConfig" resultType="ParamCollectConfig">
+		SELECT 
+			<include refid="paramCollectConfigColumns"/>
+		FROM t_param_collect_config a 
+		where biztype = 3
+	</select>
+	
+	<update id="update">
+		UPDATE t_param_collect_config SET 	
+			collecttime = #{collecttime},
+			type = #{type} 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateAutoCheckConfig">
+		UPDATE t_param_collect_config SET 	
+			collecttime = #{collecttime} 
+		WHERE biztype = #{biztype} 
+	</update>
+	
+	
+</mapper>

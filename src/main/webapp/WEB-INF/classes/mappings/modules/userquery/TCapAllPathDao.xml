@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TCapAllPathDao">
+    
+	<sql id="tCapAllPathColumns">
+		a.id AS "id",
+		a.netnames AS "netNames",
+		a.msisdn AS "msisdn",
+		a.cappath AS "capPath",
+		a.capname AS "capName",
+		a.htmlpath AS "htmlPath",
+		a.starttime AS "startTime",
+		a.endtime AS "endTime"
+	</sql>
+	
+	<sql id="tCapAllPathJoins">
+	</sql>
+    
+	<select id="get" resultType="TCapAllPath">
+		SELECT 
+			<include refid="tCapAllPathColumns"/>
+		FROM t_cap_all_path a
+		<include refid="tCapAllPathJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCapAllPath">
+		SELECT 
+			<include refid="tCapAllPathColumns"/>
+		FROM t_cap_all_path a
+		<include refid="tCapAllPathJoins"/>
+		<if test="msisdn != null and msisdn != ''">
+			where a.msisdn like 
+				<if test="dbName == 'oracle'">'%'||#{msisdn}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{msisdn}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{msisdn}, '%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryPcrfList" resultType="TCapAllPath">
+		SELECT 
+			a.id,b.f_name as "netNames",a.starttime as "startTime",a.endtime as "endTime"
+		FROM t_cap_pcrf_filter_path a,t_newnetelement b 
+		WHERE a.netid = b.f_id and a.pid = #{id}
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TCapAllPath">
+		INSERT INTO t_cap_all_path(
+			netnames,
+			msisdn,
+			cappath,
+			capname,
+			htmlpath,
+			starttime,
+			endtime
+		) VALUES (
+			#{netNames},
+			#{msisdn},
+			#{capPath},
+			#{capName},
+			#{htmlPath},
+			#{startTime},
+			#{endTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cap_all_path SET 	
+			netnames = #{netNames},
+			msisdn = #{msisdn},
+			cappath = #{capPath},
+			capname = #{capName},
+			htmlpath = #{htmlPath},
+			starttime = #{startTime},
+			endtime = #{endTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cap_all_path
+		WHERE id = #{id}
+	</update>
+</mapper>

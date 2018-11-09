@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.autocheck.dao.TAutoCheckConfigDao">
+    
+	<sql id="tAutoCheckConfigColumns">
+		a.id AS "id",
+		a.net_type AS "netType",
+		a.item_name AS "itemName",
+		a.item_limit AS "itemLimit",
+		a.item_param AS "itemParam"
+	</sql>
+	
+	<sql id="tAutoCheckConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TAutoCheckConfig">
+		SELECT 
+			<include refid="tAutoCheckConfigColumns"/>
+		FROM t_auto_check_config a
+		<include refid="tAutoCheckConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAutoCheckConfig">
+		SELECT 
+			<include refid="tAutoCheckConfigColumns"/>
+		FROM t_auto_check_config a
+		<include refid="tAutoCheckConfigJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAutoCheckConfig">
+		SELECT 
+			<include refid="tAutoCheckConfigColumns"/>
+		FROM t_auto_check_config a
+		<include refid="tAutoCheckConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_auto_check_config(
+			net_type,
+			item_name,
+			item_limit,
+			item_param
+		) VALUES (
+			#{netType},
+			#{itemName},
+			#{itemLimit},
+			#{itemParam}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_auto_check_config SET 	
+			net_type = #{netType},
+			item_name = #{itemName},
+			item_limit = #{itemLimit},
+			item_param = #{itemParam}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateConfig">
+		UPDATE t_auto_check_config SET 	
+			item_limit = #{itemLimit}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_auto_check_config
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

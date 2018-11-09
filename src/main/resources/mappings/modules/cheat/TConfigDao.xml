@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.TConfigDao">
+    
+	<sql id="tConfigColumns">
+		a.id AS "id",
+		a.freeflow AS "freeflow",
+		a.freeflowfilter AS "freeflowfilter",
+		a.freepercent AS "freepercent",
+		a.checkusercount AS "checkusercount",
+		a.catchpackageusercount AS "catchpackageusercount",
+		a.currentprogramexecutiontime AS "currentprogramexecutiontime",
+		a.finishcatchpackagetime AS "finishcatchpackagetime"
+	</sql>
+	
+	<sql id="tConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TConfig">
+		SELECT 
+			<include refid="tConfigColumns"/>
+		FROM t_config a
+		<include refid="tConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TConfig">
+		SELECT 
+			<include refid="tConfigColumns"/>,
+			b.f_name as "netName"
+		FROM t_config a,t_newnetelement b
+		<include refid="tConfigJoins"/>
+		<where>
+			a.id = b.f_id
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TConfig">
+		SELECT 
+			<include refid="tConfigColumns"/>
+		FROM t_config a
+		<include refid="tConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_config(
+			id,
+			freeflow,
+			freeflowfilter,
+			freepercent,
+			checkusercount,
+			catchpackageusercount,
+			currentprogramexecutiontime,
+			finishcatchpackagetime
+		) VALUES (
+			#{id},
+			#{freeflow},
+			#{freeflowfilter},
+			#{freepercent},
+			#{checkusercount},
+			#{catchpackageusercount},
+			#{currentprogramexecutiontime},
+			#{finishcatchpackagetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_config SET 	
+			freeflow = #{freeflow},
+			freeflowfilter = #{freeflowfilter},
+			freepercent = #{freepercent},
+			checkusercount = #{checkusercount},
+			catchpackageusercount = #{catchpackageusercount},
+			currentprogramexecutiontime = #{currentprogramexecutiontime},
+			finishcatchpackagetime = #{finishcatchpackagetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_config
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

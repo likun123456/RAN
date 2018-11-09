@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TImeitacTranslateDao">
+    
+	<sql id="tImeitacTranslateColumns">
+		a.imeitac AS "imeitac",
+		a.phonename AS "phonename"
+	</sql>
+	
+	<sql id="tImeitacTranslateJoins">
+	</sql>
+    
+	<select id="get" resultType="TImeitacTranslate">
+		SELECT 
+			<include refid="tImeitacTranslateColumns"/>
+		FROM t_imeitac_translate a
+		<include refid="tImeitacTranslateJoins"/>
+		WHERE a.imeitac = #{imeitac}
+	</select>
+	
+	<select id="findList" resultType="TImeitacTranslate">
+		SELECT 
+			<include refid="tImeitacTranslateColumns"/>
+		FROM t_imeitac_translate a
+		<include refid="tImeitacTranslateJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TImeitacTranslate">
+		SELECT 
+			<include refid="tImeitacTranslateColumns"/>
+		FROM t_imeitac_translate a
+		<include refid="tImeitacTranslateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_imeitac_translate(
+			imeitac,
+			phonename
+		) VALUES (
+			#{imeitac},
+			#{phonename}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_imeitac_translate SET 	
+			imeitac = #{imeitac},
+			phonename = #{phonename}
+		WHERE imeitac = #{imeitac}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_imeitac_translate
+		WHERE imeitac = #{imeitac}
+	</update>
+	
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.TCheatUserDao">
+	
+	<select id="getTableList" resultType="CheatUser">
+		<![CDATA[
+		SELECT t.recordtime,t.servedIMSI,sum(t.freetotal) as freetotal,sum(t.total) as total,sum(t.freetotal)/sum(t.total) as percent,c.CheatCaseChinese as cheatCaseChinese, c.CheatCase as cheatCase 
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and t.recordtime < #{endTime} 
+         GROUP BY t.servedIMSI]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY freeTotal desc 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="getTableCount" resultType="Integer" >
+		SELECT count(*) from (
+		<![CDATA[
+		SELECT servedIMSI FROM ${netId}_cheat_data_report WHERE recordtime >= #{startTime}  and recordtime < #{endTime} group by servedIMSI) as a ]]>
+	</select>
+	
+	<select id="getCheatlog" resultType="CheatLog">
+		<![CDATA[
+		SELECT t.tempstamp,t.ip,t2.CheatCaseChinese cheatCase,t.CheatNote from t_cheat_log t JOIN t_cheat_chinese t2 on t.CheatCase=t2.CheatCase WHERE 
+		t.netId = #{netId} and t.CheatCase=#{cheatCase} and t.datetime>=#{startTime} and t.datetime<=#{endTime} and t.IMSI=#{servedIMSI} order by t.datetime desc limit 200]]>
+		<!-- <![CDATA[
+		SELECT t.tempstamp,t.ip,t2.CheatCaseChinese cheatCase,t.CheatNote from t_cheat_log t JOIN t_cheat_chinese t2 on t.CheatCase=t2.CheatCase order by t.datetime desc limit 200]]> -->
+	</select>
+	
+	<select id="getPieChart" resultType="map">
+		<![CDATA[
+		SELECT t.ratingGroup,t1.name,SUM(t.dataUp) AS dataUp,SUM(t.dataDown) AS dataDown,(SUM(t.dataUp)+SUM(t.dataDown)) AS total from 
+		${netId}_cheat_data_report_ratinggroup t,t_ratinggroup_config t1 WHERE 
+		recordtime >= #{startTime} AND recordtime <= #{endTime} AND t.servedIMSI = #{servedIMSI}  AND t.ratingGroup = t1.ratingGroup 
+		GROUP BY t.ratingGroup ORDER BY total DESC 
+		]]>
+	</select>
+	
+	<select id="getFlowPieChart" resultType="map">
+		<![CDATA[
+		SELECT sum(t.freetotal) as freetotal,sum(t.total) as total from 
+		${netId}_cheat_data_report t Where t.servedIMSI = #{servedIMSI}  and t.recordtime >= #{startTime} and t.recordtime <= #{endTime} group by  t.servedIMSI 
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TFormulaDao">
+    
+	<sql id="tFormulaColumns">
+		a.id AS "id",
+		a.nettype AS "nettype",
+		a.countertype AS "countertype",
+		a.thresholdup AS "thresholdup",
+		a.thresholdup2 AS "thresholdup2",
+		a.thresholddown AS "thresholddown",
+		a.thresholddown2 AS "thresholddown2",
+		a.resumeup AS "resumeup",
+		a.resumeup2 AS "resumeup2",
+		a.resumedown AS "resumedown",
+		a.resumedown2 AS "resumedown2",
+		a.formulatext AS "formulatext",
+		a.formula AS "formula",
+		a.name AS "name",
+		a.flag AS "flag",
+		a.thresholdup_script AS "thresholdupScript",
+		a.thresholdup2_script AS "thresholdup2Script",
+		a.thresholddown_script AS "thresholddownScript",
+		a.thresholddown2_script AS "thresholddown2Script",
+		a.resumeup_script AS "resumeupScript",
+		a.resumeup2_script AS "resumeup2Script",
+		a.resumedown_script AS "resumedownScript",
+		a.resumedown2_script AS "resumedown2Script",
+		a.earlywarning AS "earlywarning",
+		a.objtype AS "objtype",
+		a.topThreshold AS "topThreshold",
+		a.downThreshold AS "downThreshold",
+		a.formulaType AS "formulaType"
+	</sql>
+	
+	<sql id="tFormulaJoins">
+	</sql>
+    
+	<select id="get" resultType="TFormula">
+		SELECT 
+			<include refid="tFormulaColumns"/>
+		FROM t_formula a
+		<include refid="tFormulaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TFormula">
+		SELECT 
+			<include refid="tFormulaColumns"/>
+		FROM t_formula a
+		<include refid="tFormulaJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="nettype != null and nettype != ''">
+				AND a.nettype = #{nettype}
+			</if>
+			<if test="flag != null and flag != ''">
+				AND a.flag = #{flag}
+			</if>
+			<if test="countertype != null and countertype != ''">
+				AND a.countertype = #{countertype}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TFormula">
+		SELECT 
+			<include refid="tFormulaColumns"/>
+		FROM t_formula a
+		<include refid="tFormulaJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_formula(
+			nettype,
+			countertype,
+			thresholdup,
+			thresholdup2,
+			thresholddown,
+			thresholddown2,
+			resumeup,
+			resumeup2,
+			resumedown,
+			resumedown2,
+			formulatext,
+			formula,
+			name,
+			flag,
+			thresholdup_script,
+			thresholdup2_script,
+			thresholddown_script,
+			thresholddown2_script,
+			resumeup_script,
+			resumeup2_script,
+			resumedown_script,
+			resumedown2_script,
+			earlywarning,
+			objtype,
+			topThreshold,
+			downThreshold,
+		    formulaType
+		) VALUES (
+			#{nettype},
+			#{countertype},
+			#{thresholdup},
+			#{thresholdup2},
+			#{thresholddown},
+			#{thresholddown2},
+			#{resumeup},
+			#{resumeup2},
+			#{resumedown},
+			#{resumedown2},
+			#{formulatext},
+			#{formula},
+			#{name},
+			#{flag},
+			#{thresholdupScript},
+			#{thresholdup2Script},
+			#{thresholddownScript},
+			#{thresholddown2Script},
+			#{resumeupScript},
+			#{resumeup2Script},
+			#{resumedownScript},
+			#{resumedown2Script},
+			#{earlywarning},
+			#{objtype},
+			#{topThreshold},
+			#{downThreshold},
+			#{formulaType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_formula SET 	
+			nettype = #{nettype},
+			countertype = #{countertype},
+			thresholdup = #{thresholdup},
+			thresholdup2 = #{thresholdup2},
+			thresholddown = #{thresholddown},
+			thresholddown2 = #{thresholddown2},
+			resumeup = #{resumeup},
+			resumeup2 = #{resumeup2},
+			resumedown = #{resumedown},
+			resumedown2 = #{resumedown2},
+			formulatext = #{formulatext},
+			formula = #{formula},
+			name = #{name},
+			flag = #{flag},
+			thresholdup_script = #{thresholdupScript},
+			thresholdup2_script = #{thresholdup2Script},
+			thresholddown_script = #{thresholddownScript},
+			thresholddown2_script = #{thresholddown2Script},
+			resumeup_script = #{resumeupScript},
+			resumeup2_script = #{resumeup2Script},
+			resumedown_script = #{resumedownScript},
+			resumedown2_script = #{resumedown2Script},
+			earlywarning = #{earlywarning},
+			objtype = #{objtype},
+			topThreshold=#{topThreshold},
+			downThreshold=#{downThreshold},
+			formulaType=#{formulaType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_formula
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryFormulaNameByKpi" resultType="String">
+	    select name from t_formula where id = #{kpi}
+	</select>
+	
+	<select id="queryCycleTime" resultType="String">
+	    select starttime from t_indexkpi
+	</select>
+	
+</mapper>

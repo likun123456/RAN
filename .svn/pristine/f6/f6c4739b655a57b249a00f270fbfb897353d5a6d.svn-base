@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TVisDangerDao">
+    
+	<sql id="tVisDangerColumns">
+		a.id AS "id",
+		a.nettype AS "nettype",
+		a.command AS "command"
+	</sql>
+	
+	<sql id="tVisDangerJoins">
+	</sql>
+    
+	<select id="get" resultType="TVisDanger">
+		SELECT 
+			<include refid="tVisDangerColumns"/>
+		FROM t_vis_danger a
+		<include refid="tVisDangerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVisDanger">
+		SELECT 
+			<include refid="tVisDangerColumns"/>
+		FROM t_vis_danger a
+		where 1=1
+		<include refid="tVisDangerJoins"/>
+		<if test="nettype != null and nettype != ''">
+		    and a.nettype =  #{nettype}
+		</if>
+		<if test="command != null and command != ''">
+			and a.command like 
+				<if test="dbName == 'oracle'">'%'||#{command}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{command}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{command}, '%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVisDanger">
+		SELECT 
+			<include refid="tVisDangerColumns"/>
+		FROM t_vis_danger a
+		<include refid="tVisDangerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_danger(
+			nettype,
+			command
+		) VALUES (
+			#{nettype},
+			#{command}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_danger SET 	
+			nettype = #{nettype},
+			command = #{command}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_danger
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TCgCdrpathDao">
+    
+	<sql id="tCgCdrpathColumns">
+		a.id AS "id",
+		a.cg_id AS "cgId",
+		a.net_id AS "netId",
+		a.path AS "path"
+	</sql>
+	
+	<sql id="tCgCdrpathJoins">
+	</sql>
+    
+	<select id="get" resultType="TCgCdrpath">
+		SELECT 
+			<include refid="tCgCdrpathColumns"/>
+		FROM t_cg_cdrpath a
+		<include refid="tCgCdrpathJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCgCdrpath">
+		SELECT 
+			<include refid="tCgCdrpathColumns"/>,b.f_name AS "netName",c.f_name AS "cgName"
+		FROM t_cg_cdrpath a,t_newnetelement b,t_cg c
+		<include refid="tCgCdrpathJoins"/>
+		<where>
+			a.cg_id = c.f_id AND a.net_id = b.f_id
+			<if test="path != null and path != ''">
+				AND a.path LIKE 
+					<if test="dbName == 'oracle'">'%'||#{path}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{path}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{path},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findAllList" resultType="TCgCdrpath">
+		SELECT 
+			<include refid="tCgCdrpathColumns"/>
+		FROM t_cg_cdrpath a
+		<include refid="tCgCdrpathJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cg_cdrpath(
+			cg_id,
+			net_id,
+			path
+		) VALUES (
+			#{cgId},
+			#{netId},
+			#{path}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cg_cdrpath SET 	
+			cg_id = #{cgId},
+			net_id = #{netId},
+			path = #{path}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cg_cdrpath
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

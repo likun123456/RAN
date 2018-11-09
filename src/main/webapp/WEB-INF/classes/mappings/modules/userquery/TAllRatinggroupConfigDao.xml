@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TAllRatinggroupConfigDao">
+    
+	<sql id="tAllRatinggroupConfigColumns">
+		a.id AS "id",
+		a.ratinggroup AS "ratinggroup",
+		a.name AS "name",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="tAllRatinggroupConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TAllRatinggroupConfig">
+		SELECT 
+			<include refid="tAllRatinggroupConfigColumns"/>
+		FROM t_all_ratinggroup_config a
+		<include refid="tAllRatinggroupConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAllRatinggroupConfig">
+		SELECT 
+			<include refid="tAllRatinggroupConfigColumns"/>
+		FROM t_all_ratinggroup_config a
+		<include refid="tAllRatinggroupConfigJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAllRatinggroupConfig">
+		SELECT 
+			<include refid="tAllRatinggroupConfigColumns"/>
+		FROM t_all_ratinggroup_config a
+		<include refid="tAllRatinggroupConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_all_ratinggroup_config(
+			ratinggroup,
+			name,
+			type
+		) VALUES (
+			#{ratinggroup},
+			#{name},
+			0
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_all_ratinggroup_config SET 	
+			ratinggroup = #{ratinggroup},
+			name = #{name},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_all_ratinggroup_config
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="batchIntert"  parameterType="java.util.List"> 
+	    <!-- <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                SELECT LAST_INSERT_ID()
+         </selectKey > -->
+           insert into t_all_ratinggroup_config 
+           (ratingGroup,name,type) 
+           values 
+            <foreach collection ="list" item="item" index= "index" separator =",">
+             (
+             #{item.ratinggroup}, #{item.name}, #{item.type}
+             )
+            </foreach >
+	</insert>
+	
+</mapper>

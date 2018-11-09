@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TDnsDao">
+    
+	<sql id="tDnsColumns">
+		a.f_id AS "id",
+		a.f_name AS "fname",
+		a.ipadr AS "faddress",
+		a.username1 AS "fusername",
+		a.password1 AS "fpassword",
+		a.type AS "type",
+		a.factory AS "factory",
+		a.f_nid AS "fnid"
+	</sql>
+	
+	<sql id="tDnsJoins">
+	</sql>
+    
+	<select id="get" resultType="TDns">
+		SELECT 
+			<include refid="tDnsColumns"/>
+		FROM t_newnetelement a
+		<include refid="tDnsJoins"/>
+		WHERE a.f_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TDns">
+		SELECT 
+			<include refid="tDnsColumns"/>
+		FROM t_newnetelement a
+		<include refid="tDnsJoins"/>
+		<where>
+		    1=1
+			<if test="fname != null and fname != ''">
+				AND a.f_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fname},'%')</if>
+			</if>
+			<if test="type != null and type != 0">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TDns">
+		SELECT 
+			<include refid="tDnsColumns"/>
+		FROM t_newnetelement a
+		<include refid="tDnsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_newnetelement(
+			f_name,
+			ipadr,
+			username1,
+			password1,
+			factory,
+			type,
+			f_nid
+		) VALUES (
+			#{fname},
+			#{faddress},
+			#{fusername},
+			#{fpassword},
+			#{factory},
+			#{type},
+			#{fnid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_newnetelement SET 	
+			f_id = #{id},
+			f_name = #{fname},
+			ipadr = #{faddress},
+			username1 = #{fusername},
+			password1 = #{fpassword}
+		WHERE f_id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_newnetelement
+		WHERE f_id = #{id}
+	</update>
+	
+</mapper>

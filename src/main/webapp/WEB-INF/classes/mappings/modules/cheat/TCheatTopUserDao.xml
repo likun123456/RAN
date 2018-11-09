@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.TCheatTopUserDao">
+
+
+	<select id="queryList" resultType="CheatTopUser">
+		<![CDATA[
+		SELECT 
+		t.servedIMSI AS servedIMSI,
+		t.ratType AS ratType,
+		FLOOR(SUM(t.freetotal)/1024) as freetotal,
+		FLOOR(sum(t.total)/1024) AS total,
+		FLOOR((SUM(t.freetotal)/1024)/(sum(t.total)/1024)) as percent,
+		t.recordtime AS recordtime,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		WHERE 
+		 t.recordtime >= #{startTime}  and t.recordtime < #{endTime}
+         GROUP BY t.servedIMSI]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY freetotal desc 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},${top}
+		 </if>
+	</select>
+
+	<select id="queryListCount" resultType="Integer">
+		SELECT count(*) from (
+			<![CDATA[
+			SELECT 
+			t.servedIMSI AS servedIMSI,
+			t.ratType AS ratType,
+			FLOOR(SUM(t.freetotal)/1024) as freetotal,
+			FLOOR(sum(t.total)/1024) AS total,
+			FLOOR((SUM(t.freetotal)/1024)/(sum(t.total)/1024)) as percent,
+			t.recordtime AS recordtime
+			FROM ${netId}_cheat_data_report t
+			WHERE 
+			 t.recordtime >= #{startTime}  and t.recordtime < #{endTime}
+	         GROUP BY t.servedIMSI]]>
+		) t
+	</select>
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TLockTemplateDao">
+    
+	<sql id="tLockTemplateColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.cardname AS "cardname",
+		a.lockId AS "lockId",
+		a.unLockId AS "unLockId",
+		a.reBootId AS "reBootId"
+	</sql>
+	
+    
+	<select id="get" resultType="TLockTemplate">
+		SELECT 
+			<include refid="tLockTemplateColumns"/>
+		FROM t_vis_excel_boardcard_lock a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TLockTemplate">
+		SELECT 
+			<include refid="tLockTemplateColumns"/>
+		FROM t_vis_excel_boardcard_lock a
+		<where>
+			<if test="cardname != null and cardname != ''">
+				AND a.cardname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cardname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cardname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cardname},'%')</if>
+			</if>
+			<if test="temp_field1 != null and temp_field1 != ''">
+				and a.cardname = #{temp_field1}
+			</if>
+			<if test="type != null and type != ''">
+				and a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TLockTemplate">
+		SELECT 
+			<include refid="tLockTemplateColumns"/>
+		FROM t_vis_excel_boardcard_lock a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="update">
+		UPDATE t_vis_excel_boardcard_lock SET 	
+			id = #{id},
+			type = #{type},
+			cardname = #{cardname},
+			lockId = #{lockId},
+			unLockId = #{unLockId},
+			reBootId=#{reBootId}			
+		WHERE id = #{id}
+	</update>
+		
+</mapper>

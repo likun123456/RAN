@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.TParamCmdStatusDao">
+    
+	<sql id="tParamCmdStatusColumns">
+		a.id AS "id",
+		a.netid AS "netid",
+		a.cmdcontent AS "cmdcontent",
+		a.executetype AS "executetype",
+		a.executetime AS "executetime",
+		a.executestatus AS "executestatus",
+		a.modcmd AS "modcmd"
+	</sql>
+	
+	<sql id="tParamCmdStatusJoins">
+	</sql>
+    
+	<select id="get" resultType="TParamCmdStatus">
+		SELECT 
+			<include refid="tParamCmdStatusColumns"/>
+		FROM t_param_cmd_status a
+		<include refid="tParamCmdStatusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TParamCmdStatus">
+		SELECT 
+			<include refid="tParamCmdStatusColumns"/>,
+			b.f_name AS "fname"
+		FROM t_param_cmd_status a,t_newnetelement b
+		<include refid="tParamCmdStatusJoins"/>
+		<choose>
+			<when test="netid !=null and netid != ''">
+				WHERE a.netid = b.f_id and a.netid = #{netid}
+			</when>
+			<otherwise>
+			    WHERE a.netid = b.f_id
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TParamCmdStatus">
+		SELECT 
+			<include refid="tParamCmdStatusColumns"/>
+		FROM t_param_cmd_status a
+		<include refid="tParamCmdStatusJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

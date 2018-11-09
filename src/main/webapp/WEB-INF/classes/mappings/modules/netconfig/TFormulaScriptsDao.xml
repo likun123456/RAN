@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TFormulaScriptsDao">
+    
+	<sql id="tScriptsColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.scripts_type AS "scriptsType"
+	</sql>
+	
+	<sql id="tScriptsJoins">
+	</sql>
+    
+	<select id="get" resultType="TFormulaScripts">
+		SELECT 
+			<include refid="tScriptsColumns"/>
+		FROM t_formula_scripts a
+		<include refid="tScriptsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TFormulaScripts">
+		SELECT 
+			<include refid="tScriptsColumns"/>
+		FROM t_formula_scripts a
+		<include refid="tScriptsJoins"/>
+		<if test="name != null and name != ''">
+			where a.name like 
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+		<if test="scriptsType != null and scriptsType != ''">
+			where a.scripts_type=${scriptsType} 
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} 
+			</when>
+			<otherwise>
+				ORDER BY a.update_time DESC 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TFormulaScripts">
+		SELECT 
+			<include refid="tScriptsColumns"/>
+		FROM t_formula_scripts a
+		<include refid="tScriptsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TFormulaScripts">
+		INSERT INTO t_formula_scripts(
+			name,
+			scripts_type
+		) VALUES (
+			#{name},
+			#{scriptsType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_formula_scripts SET 	
+			id = #{id},
+			name = #{name},
+			scripts_type = #{scriptsType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_formula_scripts WHERE id = #{id}
+	</update>
+	
+	<select id="getByName" resultType="int">
+		SELECT COUNT(*)
+		FROM t_formula_scripts a
+		WHERE a.name = #{name}
+	</select>
+	
+</mapper>

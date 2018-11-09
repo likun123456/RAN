@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TCgDao">
+    
+	<sql id="tCgColumns">
+		a.f_id AS "id",
+		a.f_name AS "fname",
+		a.f_address AS "faddress",
+		a.f_username AS "fusername",
+		a.f_password AS "fpassword",
+		a.f_computerroom AS "croom"
+	</sql>
+	
+	<sql id="tCgJoins">
+	</sql>
+    
+	<select id="get" resultType="TCg">
+		SELECT 
+			<include refid="tCgColumns"/>
+		FROM t_cg a
+		<include refid="tCgJoins"/>
+		WHERE a.f_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCg">
+		SELECT 
+			<include refid="tCgColumns"/>
+		FROM t_cg a
+		<include refid="tCgJoins"/>
+		where 1=1 
+		<if test="fname != null and fname != ''">
+			and a.f_name like 
+				<if test="dbName == 'oracle'">'%'||#{fname}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{fname}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{fname}, '%')</if>
+		</if>
+		<if test="croom != null and croom != ''">
+			and a.f_computerroom = #{croom}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCg">
+		SELECT 
+			<include refid="tCgColumns"/>
+		FROM t_cg a
+		<include refid="tCgJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cg(
+			f_name,
+			f_address,
+			f_username,
+			f_password,
+			f_computerroom
+		) VALUES (
+			#{fname},
+			#{faddress},
+			#{fusername},
+			#{fpassword},
+			#{croom}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cg SET 	
+			f_id = #{id},
+			f_name = #{fname},
+			f_address = #{faddress},
+			f_username = #{fusername},
+			f_password = #{fpassword},
+			f_computerroom=#{croom}
+		WHERE f_id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cg
+		WHERE f_id = #{id}
+	</update>
+	
+	<select id="getByName" resultType="int">
+		SELECT COUNT(*)
+		FROM t_cg a
+		WHERE a.f_name = #{fname}
+	</select>
+	
+</mapper>

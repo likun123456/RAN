@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.TCheatFlowPerentDao">
+	
+	<select id="getTableList" resultType="CheatFlowPerent">
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.recordtime AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.recordtime]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY freeTotal desc 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="getTableCount" resultType="Integer" >
+	SELECT count(*) from (
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.recordtime AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.recordtime]]>
+       ) t
+	</select>
+	
+	<select id="getTableListDay" resultType="CheatFlowPerent">
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.timeD AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.timeD]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY freeTotal desc 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="getTableCountDay" resultType="Integer" >
+	SELECT count(*) from (
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.timeD AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.timeD]]>
+       ) t
+	</select>
+	
+	<select id="getTableListMonth" resultType="CheatFlowPerent">
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.timeM AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.timeM]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY freeTotal desc 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="getTableCountMonth" resultType="Integer" >
+	SELECT count(*) from (
+		<![CDATA[
+		SELECT 
+		FLOOR(sum(t.freetotal)/1024) AS freetotal,
+		t.timeM AS recordtime,
+		c.CheatCaseChinese AS cheatCase,
+		#{netName} AS netName
+		FROM ${netId}_cheat_data_report t
+		LEFT JOIN t_cheat_chinese c ON t.CheatCase = c.CheatCase
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.CheatCase,t.timeM]]>
+       ) t
+	</select>
+	
+	<select id="getTypeList" resultType="String">
+	    <![CDATA[
+		SELECT DISTINCT(t.recordtime) as  recordtime
+		FROM ${netId}_cheat_data_report t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime <= #{endTime} 
+        order by t.recordtime asc]]>
+	</select>
+	<select id="getTypeListDay" resultType="String">
+	    <![CDATA[
+		SELECT DISTINCT(t.timeD) as  recordtime
+		FROM ${netId}_cheat_data_report t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime <= #{endTime} 
+        order by t.recordtime asc]]>
+	</select>
+	<select id="getTypeListMonth" resultType="String">
+	    <![CDATA[
+		SELECT DISTINCT(t.timeM) as  recordtime
+		FROM ${netId}_cheat_data_report t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime <= #{endTime} 
+        order by t.recordtime asc]]>
+	</select>
+	
+	<select id="getTotalFlow" resultType="CheatFlowPerent">
+	    <![CDATA[
+		SELECT 
+		t.recordtime AS recordtime,
+		FLOOR((sum(dataUp)+sum(dataDown))/1024) as total
+		FROM ${netId}_cdrsuball_up_down t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.recordtime]]>	    
+	</select>
+	
+	<select id="getTotalFlowDay" resultType="CheatFlowPerent">
+	    <![CDATA[
+		SELECT 
+		t.timeD AS recordtime,
+		FLOOR((sum(dataUp)+sum(dataDown))/1024) as total
+		FROM ${netId}_cdrsuball_up_down t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.timeD]]>	    
+	</select>
+	
+	<select id="getTotalFlowMonth" resultType="CheatFlowPerent">
+	    <![CDATA[
+		SELECT 
+		t.timeM AS recordtime,
+		FLOOR((sum(dataUp)+sum(dataDown))/1024) as total
+		FROM ${netId}_cdrsuball_up_down t
+		WHERE 
+		 t.recordtime >= #{startTime}  and recordtime < #{endTime} 
+         GROUP BY t.timeM]]>	    
+	</select>
+</mapper>

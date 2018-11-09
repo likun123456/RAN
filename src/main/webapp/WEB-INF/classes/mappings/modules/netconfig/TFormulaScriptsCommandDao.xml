@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TFormulaScriptsCommandDao">
+    
+	<sql id="tScriptsCommandColumns">
+		a.id AS "id",
+		a.command AS "command",
+		a.scripts_id AS "scriptsId",
+		a.order_num AS "orderNum"
+	</sql>
+	
+	<sql id="tScriptsCommandJoins">
+	</sql>
+    
+	<select id="get" resultType="TFormulaScriptsCommands">
+		SELECT 
+			<include refid="tScriptsCommandColumns"/>
+		FROM t_formula_scripts_commands a
+		<include refid="tScriptsCommandJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TFormulaScriptsCommands">
+		SELECT 
+			<include refid="tScriptsCommandColumns"/>
+		FROM t_formula_scripts_commands a 
+		<include refid="tScriptsCommandJoins"/>
+		
+		<if test="scriptsId != null and scriptsId != ''">
+			where a.scripts_id = #{scriptsId} 
+		</if>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} 
+			</when>
+			<otherwise>
+				ORDER BY a.order_num ASC 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TFormulaScriptsCommands">
+		SELECT 
+			<include refid="tScriptsCommandColumns"/>
+		FROM t_formula_scripts_commands a
+		<include refid="tScriptsCommandJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TFormulaScriptsCommands">
+		INSERT INTO t_formula_scripts_commands(
+			scripts_id,
+			command,
+			order_num
+		) VALUES (
+			#{scriptsId},
+			#{command},
+			#{orderNum}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_formula_scripts_commands SET 	
+			id = #{id},
+			scripts_id = #{scriptsId},
+			command = #{command},
+			order_num = #{orderNum} 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_formula_scripts_commands WHERE id = #{id}
+	</update>
+	
+</mapper>

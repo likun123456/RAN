@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TCapConfigDao">
+    
+	<sql id="tCapConfigColumns">
+		a.id AS "id",
+		a.cpu_limit AS "cpuLimit",
+		a.disk_limit AS "diskLimit",
+		a.check_period AS "checkPeriod"
+	</sql>
+	
+	<sql id="tCapConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TCapConfig">
+		SELECT 
+			<include refid="tCapConfigColumns"/>
+		FROM t_cap_config a
+		<include refid="tCapConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCapConfig">
+		SELECT 
+			<include refid="tCapConfigColumns"/>
+		FROM t_cap_config a
+		<include refid="tCapConfigJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCapConfig">
+		SELECT 
+			<include refid="tCapConfigColumns"/>
+		FROM t_cap_config a
+		<include refid="tCapConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cap_config(
+			cpu_limit,
+			disk_limit,
+			check_period
+		) VALUES (
+			#{cpuLimit},
+			#{diskLimit},
+			#{checkPeriod}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cap_config SET 	
+			cpu_limit = #{cpuLimit},
+			disk_limit = #{diskLimit},
+			check_period = #{checkPeriod}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cap_config
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

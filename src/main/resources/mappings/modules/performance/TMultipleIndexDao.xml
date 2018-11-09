@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TMultipleIndexDao">
+    
+	<sql id="tMultipleIndexColumns">
+		t1.netID as netID,
+		t1.dateTime as dateTime,
+		t1.KPI as KPI,
+		t3.countertype as countertype,
+		t2.f_name as fname,
+		t1.result as result,
+		t1.d_result as dresult,
+		t1.w_result as wresult,
+		t1.aw_result as awresult,
+		t3.name as name,
+		t3.formulatext as formulatext
+	</sql>
+	
+	<sql id="tMultipleIndexColumnsJoins">
+	</sql>
+	
+	<select id="findChart" resultType="TStatisticsVO">
+		SELECT 
+			<include refid="tMultipleIndexColumns"/>
+		FROM t_statistics_${temp_field1} t1,t_newnetelement t2,t_formula t3
+		<include refid="tMultipleIndexColumnsJoins"/>
+		<where>
+			<![CDATA[t1.netID = t2.f_id and t1.KPI = t3.id  and t1.netID =#{netid}  and t1.KPI = #{formulaType} and t1.dateTime>=#{startTime} and t1.dateTime<=#{endTime} order by t1.dateTime]]>
+		</where>
+	</select>
+	
+		<select id="queryList" resultType="TStatisticsVO" >
+				SELECT 
+			<include refid="tMultipleIndexColumns"/>
+				FROM t_statistics_${netType} t1,t_newnetelement t2,t_formula t3
+         	<where>
+         		t1.netID = t2.f_id and t1.KPI = t3.id  and t1.netID in 
+         		<foreach item="item" index="index" collection="netids"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>  
+				and t1.KPI in 
+				<foreach item="item" index="index" collection="formulaTypes"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>
+         		<![CDATA[and t1.dateTime>=#{startTime} and t1.dateTime<=#{endTime} ]]>
+         	</where>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY datetime 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	<select id="queryListCount" resultType="Integer" >
+				SELECT count(*)
+				FROM t_statistics_${netType} t1,t_newnetelement t2,t_formula t3
+         	<where>
+         		t1.netID = t2.f_id and t1.KPI = t3.id  and t1.netID in 
+         		<foreach item="item" index="index" collection="netids"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>  
+				and t1.KPI in 
+				<foreach item="item" index="index" collection="formulaTypes"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>
+			<![CDATA[ and t1.dateTime>=#{startTime} and t1.dateTime<=#{endTime} ]]>
+         	</where>
+	</select>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TIndexKpiParamDao">
+    
+	<sql id="tIndexKpiParamColumns">
+		a.id AS "id",
+		a.kpi AS "kpi",
+		a.excellentup AS "excellentup",
+		a.excellentdown AS "excellentdown",
+		a.goodup AS "goodup",
+		a.gooddown AS "gooddown",
+		a.wellup AS "wellup",
+		a.welldown AS "welldown",
+		a.badup AS "badup",
+		a.baddown AS "baddown",
+		a.alarmup AS "alarmup",
+		a.alarmdown AS "alarmdown"
+	</sql>
+    
+	<select id="get" resultType="TIndexKpiParam">
+		SELECT 
+			<include refid="tIndexKpiParamColumns"/>
+		FROM t_indexkpiparam a
+		<where>			
+			<if test="id != null and id != ''">
+				AND id = ${id}
+			</if>
+			<if test="kpi != null and kpi != ''">
+				AND kpi = ${kpi}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TIndexKpiParam">
+		SELECT 
+			<include refid="tIndexKpiParamColumns"/>
+		FROM t_indexkpiparam a
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_indexkpiparam(
+			kpi,
+			excellentup,
+			excellentdown,
+			goodup,
+			gooddown,
+			wellup,
+			welldown,
+			badup,
+			baddown,
+			alarmup,
+			alarmdown
+		) VALUES (
+			#{kpi},
+			#{excellentUp},
+			#{excellentDown},
+			#{goodUp},
+			#{goodDown},
+			#{wellUp},
+			#{wellDown},
+			#{badUp},
+			#{badDown},
+			#{alarmUp},
+			#{alarmDown}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_indexkpiparam SET 	
+			kpi = #{kpi},
+			excellentup = #{excellentUp},
+			excellentdown = #{excellentDown},
+			goodup = #{goodUp},
+			gooddown = #{goodDown},
+			wellup = #{wellUp},
+			welldown = #{wellDown},
+			badup = #{badUp},
+			baddown = #{badDown},
+			alarmup = #{alarmUp},
+			alarmdown = #{alarmDown}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_indexkpiparam
+		<where>			
+			<if test="id != null and id != ''">
+				AND id = ${id}
+			</if>
+			<if test="kpi != null and kpi != ''">
+				AND kpi = ${kpi}
+			</if>
+		</where>
+	</update>
+</mapper>

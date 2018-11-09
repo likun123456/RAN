@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TNewnetelementDao">
+    
+	<sql id="tNewnetelementColumns">
+		a.f_id AS "id",
+		a.f_name AS "fname",
+		a.f_nid AS "fnid",
+		a.epgtype AS "epgtype",
+		a.hwtype AS "hwtype",
+		a.softwareversion AS "softwareversion",
+		a.ipadr AS "ipadr",
+		a.username1 AS "username1",
+		a.password1 AS "password1",
+		a.username2 AS "username2",
+		a.password2 AS "password2",
+		a.adminipadr AS "adminipadr",
+		a.adminname AS "adminname",
+		a.adminpassword AS "adminpassword",
+		a.countftpurl AS "countftpurl",
+		a.cdrftpurl AS "cdrftpurl",
+		a.oss AS "oss",
+		a.epa AS "epa",
+		a.type AS "type",
+		a.enabled AS "enabled",
+		a.isdownload AS "isdownload",
+		a.isstore AS "isstore",
+		a.cgid AS "cgid",
+		a.ebmlog AS "ebmlog",
+		a.mmemaxuserattached AS "mmemaxuserattached",
+		a.sgwmaxbearers AS "sgwmaxbearers",
+		a.sgwmaxthroughput AS "sgwmaxthroughput",
+		a.pgwmaxbearers AS "pgwmaxbearers",
+		a.pgwmaxthroughput AS "pgwmaxthroughput",
+		a.ggsnmaxpdpcontexts AS "ggsnmaxpdpcontexts",
+		a.ggsnmaxthroughput AS "ggsnmaxthroughput",
+		a.downloadebmlogtime AS "downloadebmlogtime",
+		a.paramexported AS "paramexported",
+		a.cardcode AS "cardcode",
+		a.factory AS factory,
+		a.computerroom AS croom
+	</sql>
+	
+	<sql id="tNewnetelementJoins">
+	</sql>
+    
+	<select id="get" resultType="TNewnetelement">
+		SELECT 
+			<include refid="tNewnetelementColumns"/>
+		FROM t_newnetelement a
+		<include refid="tNewnetelementJoins"/>
+		WHERE a.f_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TNewnetelement">
+		SELECT 
+			<include refid="tNewnetelementColumns"/>,
+			b.f_poolname as "poolname"
+		FROM t_newnetelement a,t_pool b
+		<include refid="tNewnetelementJoins"/>
+		<where>
+			a.f_nid = b.f_id 
+			<if test="type!=null">
+			    AND a.type = #{type}
+			</if>
+			<if test="temp_field1!=null">
+			    AND b.f_type = #{temp_field1}
+			</if>
+			<if test="temp_field2!=null">
+			    AND a.f_nid in (${temp_field2})
+			</if>
+			<if test="temp_field3!=null">
+			    AND a.f_id in (${temp_field3})
+			</if>
+			<if test="fnid !=null and fnid != 0">
+				AND b.f_id = #{fnid} 
+			</if>
+			<if test="oss!=null">
+			    AND a.oss = #{oss}
+			</if> 
+			<if test="epa!=null">
+			    AND a.epa = #{epa}
+			</if>
+			<if test="fname != null and fname != ''">
+				AND a.f_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fname},'%')</if>
+			</if>
+			<if test="paramexported!=null and paramexported !=''">
+			    AND a.paramexported = #{paramexported} 
+			</if>
+			<if test="croom!=null and croom !=''">
+			    AND a.computerroom = #{croom} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TNewnetelement">
+		SELECT 
+			<include refid="tNewnetelementColumns"/>
+		FROM t_newnetelement a
+		<include refid="tNewnetelementJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_newnetelement(
+			f_name,
+			f_nid,
+			epgtype,
+			hwtype,
+			softwareversion,
+			ipadr,
+			username1,
+			password1,
+			username2,
+			password2,
+			adminipadr,
+			adminname,
+			adminpassword,
+			countftpurl,
+			cdrftpurl,
+			oss,
+			epa,
+			type,
+			enabled,
+			isdownload,
+			isstore,
+			cgid,
+			ebmlog,
+			mmemaxuserattached,
+			sgwmaxbearers,
+			sgwmaxthroughput,
+			pgwmaxbearers,
+			pgwmaxthroughput,
+			ggsnmaxpdpcontexts,
+			ggsnmaxthroughput,
+			downloadebmlogtime,
+			paramexported,
+			cardcode,
+			factory,
+			computerroom
+		) VALUES (
+			#{fname},
+			#{fnid},
+			#{epgtype},
+			#{hwtype},
+			#{softwareversion},
+			#{ipadr},
+			#{username1},
+			#{password1},
+			#{username2},
+			#{password2},
+			#{adminipadr},
+			#{adminname},
+			#{adminpassword},
+			#{countftpurl},
+			#{cdrftpurl},
+			#{oss},
+			#{epa},
+			#{type},
+			1,
+			#{isdownload},
+			#{isstore},
+			#{cgid},
+			#{ebmlog},
+			#{mmemaxuserattached},
+			#{sgwmaxbearers},
+			#{sgwmaxthroughput},
+			#{pgwmaxbearers},
+			#{pgwmaxthroughput},
+			#{ggsnmaxpdpcontexts},
+			#{ggsnmaxthroughput},
+			#{downloadebmlogtime},
+			#{paramexported},
+			#{cardcode},
+			#{factory},
+			#{croom}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_newnetelement SET 	
+			f_id = #{id},
+			f_name = #{fname},
+			f_nid = #{fnid},
+			epgtype = #{epgtype},
+			hwtype = #{hwtype},
+			softwareversion = #{softwareversion},
+			ipadr = #{ipadr},
+			username1 = #{username1},
+			password1 = #{password1},
+			username2 = #{username2},
+			password2 = #{password2},
+			adminipadr = #{adminipadr},
+			adminname = #{adminname},
+			adminpassword = #{adminpassword},
+			countftpurl = #{countftpurl},
+			cdrftpurl = #{cdrftpurl},
+			oss = #{oss},
+			epa = #{epa},
+			type = #{type},
+			enabled = #{enabled},
+			isdownload = #{isdownload},
+			isstore = #{isstore},
+			cgid = #{cgid},
+			ebmlog = #{ebmlog},
+			mmemaxuserattached = #{mmemaxuserattached},
+			sgwmaxbearers = #{sgwmaxbearers},
+			sgwmaxthroughput = #{sgwmaxthroughput},
+			pgwmaxbearers = #{pgwmaxbearers},
+			pgwmaxthroughput = #{pgwmaxthroughput},
+			ggsnmaxpdpcontexts = #{ggsnmaxpdpcontexts},
+			ggsnmaxthroughput = #{ggsnmaxthroughput},
+			downloadebmlogtime = #{downloadebmlogtime},
+			paramexported = #{paramexported},
+			cardcode = #{cardcode},
+			factory = #{factory},
+			computerroom=#{croom}
+		WHERE f_id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_newnetelement
+		WHERE f_id = #{id}
+	</update>
+	
+	<select id="getByName" resultType="int">
+		SELECT COUNT(*)
+		FROM t_newnetelement a
+		WHERE a.f_name = #{fname}
+	</select>
+	
+	<select id="findListByServiceType" resultType="TNewnetelement">
+		SELECT
+			a.f_id AS "id",
+			a.f_nid AS "fnid",
+			a.f_name AS "fname"
+		FROM
+			t_newnetelement a LEFT JOIN t_elementcollect b on a.f_id = b.F_NETELEMENT
+		WHERE 1=1
+		  <if test="type!=null">
+			 AND a.type = #{type}
+		  </if>
+		  <if test="temp_field1!=null">
+		     and b.F_TYPE = #{temp_field1}
+		  </if>
+	</select>
+	
+	
+	<select id="findListByTypeAndCollect" resultType="TNewnetelement">
+		SELECT
+			pool.F_ID AS "fnid",
+			temp.f_id AS "id",
+			temp.f_name AS "fname"
+		FROM
+			t_pool pool
+		RIGHT JOIN (
+			SELECT
+				net.f_id,
+				net.f_name,
+				net.f_nid
+			FROM
+				t_newnetelement net
+			RIGHT JOIN (
+				SELECT
+					F_NETELEMENT
+				FROM
+					t_elementcollect
+				WHERE
+					F_TYPE = #{type}
+			) collect ON net.f_id = collect.F_NETELEMENT
+		) temp ON pool.F_ID = temp.f_nid;
+	</select>
+	
+	<select id="getVersionByNetIdAndDate" resultType="string">
+		select distinct(version) from t_param_data where netid=#{netid}  and fetchdate=#{date}
+	</select>
+	
+	<select id="getParamTypeByNet" resultType="string">
+		SELECT distinct(type) FROM t_param_dictionary_${netType} where version=#{version}
+	</select>
+	
+	<select id="getNewNetelementsByType" resultType="TNewnetelement">
+		select 
+		<include refid="tNewnetelementColumns"/> 
+		from t_newnetelement a where type=#{netType}
+	</select>
+	
+	<select id="findPoolidByNetName" resultType="long">
+		SELECT f_nid
+		FROM t_newnetelement a
+		WHERE a.f_name = #{mmeNetName}
+	</select>
+	
+	<select id="findNetIpByNetName" resultType="TNewnetelement">
+		SELECT 
+             <include refid="tNewnetelementColumns"/>
+		FROM t_newnetelement a
+		WHERE a.f_name = #{saegwNetName}
+	</select>
+</mapper>

@@ -1,0 +1,1044 @@
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+.panel-body {
+  padding: 10px;
+}
+.panel-heading {
+  padding: 5px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit;
+}
+.panel-title > a {
+  color: inherit;
+}
+
+.panel-default {
+  border-color: #ddd;
+}
+.panel-default > .panel-heading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.panel-default > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #ddd;
+}
+.panel-default > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #ddd;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('icomoon.eot?xogecs');
+  src:  url('icomoon.eot?xogecs#iefix') format('embedded-opentype'),
+    url('icomoon.ttf?xogecs') format('truetype'),
+    url('icomoon.woff?xogecs') format('woff'),
+    url('icomoon.svg?xogecs#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.nav-list li a .icon-uniE900:before {
+  content: "\2d";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-uniE900:before {
+  content: "\2d";
+  color: #fff;
+}
+
+.nav-list li a .icon-0:before {
+  content: "\30";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-0:before {
+  content: "\30";
+  color: #fff;
+}
+
+.nav-list li a .icon-1:before {
+  content: "\31";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-1:before {
+  content: "\31";
+  color: #fff;
+}
+
+.nav-list li a .icon-2:before {
+  content: "\32";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-2:before {
+  content: "\32";
+  color: #fff;
+}
+.nav-list li a .icon-3:before {
+  content: "\33";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-3:before {
+  content: "\33";
+  color: #fff;
+}
+.nav-list li a .icon-4:before {
+  content: "\34";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-4:before {
+  content: "\34";
+  color: #fff;
+}
+.nav-list li a .icon-5:before {
+  content: "\35";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-5:before {
+  content: "\35";
+  color: #fff;
+}
+.nav-list li a .icon-6:before {
+  content: "\36";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-6:before {
+  content: "\36";
+  color: #fff;
+}
+.nav-list li a .icon-7:before {
+  content: "\37";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-7:before {
+  content: "\37";
+  color: #fff;
+}
+.nav-list li a .icon-8:before {
+  content: "\38";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-8:before {
+  content: "\38";
+  color: #fff;
+}
+
+.nav-list li a .icon-9:before {
+  content: "\39";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-9:before {
+  content: "\39";
+  color: #fff;
+}
+
+
+
+
+
+.nav-list li a .icon-a:before {
+  content: "\61";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-a:before {
+  content: "\61";
+  color: #fff;
+}
+
+.nav-list li a .icon-b:before {
+  content: "\62";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-b:before {
+  content: "\62";
+  color: #fff;
+}
+
+.nav-list li a .icon-c:before {
+  content: "\63";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-c:before {
+  content: "\63";
+  color: #fff;
+}
+
+.nav-list li a .icon-d:before {
+  content: "\64";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-d:before {
+  content: "\64";
+  color: #fff;
+}
+
+.nav-list li a .icon-e:before {
+  content: "\65";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-e:before {
+  content: "\65";
+  color: #fff;
+}
+
+
+.nav-list li a .icon-f:before {
+  content: "\66";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-f:before {
+  content: "\66";
+  color: #fff;
+}
+
+.nav-list li a .icon-g:before {
+  content: "\67";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-g:before {
+  content: "\67";
+  color: #fff;
+}
+
+.nav-list li a .icon-h:before {
+  content: "\68";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-h:before {
+  content: "\68";
+  color: #fff;
+}
+
+.nav-list li a .icon-i:before {
+  content: "\69";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-i:before {
+  content: "\69";
+  color: #fff;
+}
+
+.nav-list li a .icon-j:before {
+  content: "\6a";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-j:before {
+  content: "\6a";
+  color: #fff;
+}
+
+.nav-list li a .icon-k:before {
+  content: "\6b";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-k:before {
+  content: "\6b";
+  color: #fff;
+}
+
+.nav-list li a .icon-l:before {
+  content: "\6c";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-l:before {
+  content: "\6c";
+  color: #fff;
+}
+
+.nav-list li a .icon-m:before {
+  content: "\6d";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-m:before {
+  content: "\6d";
+  color: #fff;
+}
+
+.nav-list li a .icon-n:before {
+  content: "\6e";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-n:before {
+  content: "\6e";
+  color: #fff;
+}
+
+.nav-list li a .icon-o:before {
+  content: "\6f";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-o:before {
+  content: "\6f";
+  color: #fff;
+}
+
+.nav-list li a .icon-p:before {
+  content: "\70";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-p:before {
+  content: "\70";
+  color: #fff;
+}
+
+.nav-list li a .icon-q:before {
+  content: "\71";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-q:before {
+  content: "\71";
+  color: #fff;
+}
+
+.nav-list li a .icon-Q:before {
+  content: "\51";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-Q:before {
+  content: "\51";
+  color: #fff;
+}
+
+.nav-list li a .icon-r:before {
+  content: "\72";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-r:before {
+  content: "\72";
+  color: #fff;
+}
+
+.nav-list li a .icon-R:before {
+  content: "\52";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-R:before {
+  content: "\52";
+  color: #fff;
+}
+
+.nav-list li a .icon-s:before {
+  content: "\73";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-s:before {
+  content: "\73";
+  color: #fff;
+}
+
+.nav-list li a .icon-t:before {
+  content: "\74";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-t:before {
+  content: "\74";
+  color: #fff;
+}
+
+.nav-list li a .icon-u:before {
+  content: "\75";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-u:before {
+  content: "\75";
+  color: #fff;
+}
+
+.nav-list li a .icon-v:before {
+  content: "\76";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-v:before {
+  content: "\76";
+  color: #fff;
+}
+
+.nav-list li a .icon-w:before {
+  content: "\77";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-w:before {
+  content: "\77";
+  color: #fff;
+}
+
+.nav-list li a .icon-x:before {
+  content: "\78";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-x:before {
+  content: "\78";
+  color: #fff;
+}
+
+.nav-list li a .icon-y:before {
+  content: "\79";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-y:before {
+  content: "\79";
+  color: #fff;
+}
+
+.nav-list li a .icon-z:before {
+  content: "\7a";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-z:before {
+  content: "\7a";
+  color: #fff;
+}
+
+.nav-list li a .icon-FF:before {
+  content: "\29";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-FF:before {
+  content: "\29";
+  color: #fff;
+}
+
+.nav-list li a .icon-aa:before {
+  content: "\28";
+  color: #1f4e79;
+}
+
+.nav-list li.active a .icon-aa:before {
+  content: "\28";
+  color: #fff;
+}
+
+
+
+.menu .icon-uniE900:before {
+  content: "\2d";
+  color: #1f4e79;
+}
+.menu .icon-0:before {
+  content: "\30";
+  color: #1f4e79;
+}
+.menu .icon-1:before {
+  content: "\31";
+  color: #1f4e79;
+}
+.menu .icon-2:before {
+  content: "\32";
+  color: #1f4e79;
+}
+.menu .icon-3:before {
+  content: "\33";
+  color: #1f4e79;
+}
+.menu .icon-4:before {
+  content: "\34";
+  color: #1f4e79;
+}
+.menu .icon-5:before {
+  content: "\35";
+  color: #1f4e79;
+}
+.menu .icon-6:before {
+  content: "\36";
+  color: #1f4e79;
+}
+.menu .icon-7:before {
+  content: "\37";
+  color: #1f4e79;
+}
+.menu .icon-8:before {
+  content: "\38";
+  color: #1f4e79;
+}
+.menu .icon-9:before {
+  content: "\39";
+  color: #1f4e79;
+}
+.menu .icon-a:before {
+  content: "\61";
+  color: #1f4e79;
+}
+.menu .icon-b:before {
+  content: "\62";
+  color: #1f4e79;
+}
+.menu .icon-c:before {
+  content: "\63";
+  color: #1f4e79;
+}
+.menu .icon-d:before {
+  content: "\64";
+  color: #1f4e79;
+}
+.menu .icon-e:before {
+  content: "\65";
+  color: #1f4e79;
+}
+.menu .icon-f:before {
+  content: "\66";
+  color: #1f4e79;
+}
+.menu .icon-g:before {
+  content: "\67";
+  color: #1f4e79;
+}
+.menu .icon-h:before {
+  content: "\68";
+  color: #1f4e79;
+}
+.menu .icon-i:before {
+  content: "\69";
+  color: #1f4e79;
+}
+.menu .icon-j:before {
+  content: "\6a";
+  color: #1f4e79;
+}
+.menu .icon-k:before {
+  content: "\6b";
+  color: #1f4e79;
+}
+.menu .icon-l:before {
+  content: "\6c";
+  color: #1f4e79;
+}
+.menu .icon-m:before {
+  content: "\6d";
+  color: #1f4e79;
+}
+.menu .icon-n:before {
+  content: "\6e";
+  color: #1f4e79;
+}
+.menu .icon-o:before {
+  content: "\6f";
+  color: #1f4e79;
+}
+.menu .icon-p:before {
+  content: "\70";
+  color: #1f4e79;
+}
+.menu .icon-q:before {
+  content: "\71";
+  color: #1f4e79;
+}
+.menu .icon-Q:before {
+  content: "\51";
+  color: #1f4e79;
+}
+.menu .icon-r:before {
+  content: "\72";
+  color: #1f4e79;
+}
+
+.menu .icon-R:before {
+  content: "\52";
+  color: #1f4e79;
+}
+
+.menu .icon-s:before {
+  content: "\73";
+  color: #1f4e79;
+}
+.menu .icon-t:before {
+  content: "\74";
+  color: #1f4e79;
+}
+.menu .icon-u:before {
+  content: "\75";
+  color: #1f4e79;
+}
+.menu .icon-v:before {
+  content: "\76";
+  color: #1f4e79;
+}
+.menu .icon-w:before {
+  content: "\77";
+  color: #1f4e79;
+}
+.menu .icon-x:before {
+  content: "\78";
+  color: #1f4e79;
+}
+.menu .icon-y:before {
+  content: "\79";
+  color: #1f4e79;
+}
+.menu .icon-z:before {
+  content: "\7a";
+  color: #1f4e79;
+}
+
+.menu .icon-FF:before {
+  content: "\29";
+  color: #1f4e79;
+}
+
+.menu .icon-aa:before {
+  content: "\28";
+  color: #1f4e79;
+}
+
+
+
+.accordion-group .icon-uniE900:before {
+  content: "\2d";
+  color: #1f4e79;
+}
+.accordion-group .icon-0:before {
+  content: "\30";
+  color: #1f4e79;
+}
+.accordion-group .icon-1:before {
+  content: "\31";
+  color: #1f4e79;
+}
+.accordion-group .icon-2:before {
+  content: "\32";
+  color: #1f4e79;
+}
+.accordion-group .icon-3:before {
+  content: "\33";
+  color: #1f4e79;
+}
+.accordion-group .icon-4:before {
+  content: "\34";
+  color: #1f4e79;
+}
+.accordion-group .icon-5:before {
+  content: "\35";
+  color: #1f4e79;
+}
+.accordion-group .icon-6:before {
+  content: "\36";
+  color: #1f4e79;
+}
+.accordion-group .icon-7:before {
+  content: "\37";
+  color: #1f4e79;
+}
+.accordion-group .icon-8:before {
+  content: "\38";
+  color: #1f4e79;
+}
+.accordion-group .icon-9:before {
+  content: "\39";
+  color: #1f4e79;
+}
+.accordion-group .icon-a:before {
+  content: "\61";
+  color: #1f4e79;
+}
+.accordion-group .icon-b:before {
+  content: "\62";
+  color: #1f4e79;
+}
+.accordion-group .icon-c:before {
+  content: "\63";
+  color: #1f4e79;
+}
+.accordion-group .icon-d:before {
+  content: "\64";
+  color: #1f4e79;
+}
+.accordion-group .icon-e:before {
+  content: "\65";
+  color: #1f4e79;
+}
+.accordion-group .icon-f:before {
+  content: "\66";
+  color: #1f4e79;
+}
+.accordion-group .icon-g:before {
+  content: "\67";
+  color: #1f4e79;
+}
+.accordion-group .icon-h:before {
+  content: "\68";
+  color: #1f4e79;
+}
+.accordion-group .icon-i:before {
+  content: "\69";
+  color: #1f4e79;
+}
+.accordion-group .icon-j:before {
+  content: "\6a";
+  color: #1f4e79;
+}
+.accordion-group .icon-k:before {
+  content: "\6b";
+  color: #1f4e79;
+}
+.accordion-group .icon-l:before {
+  content: "\6c";
+  color: #1f4e79;
+}
+.accordion-group .icon-m:before {
+  content: "\6d";
+  color: #1f4e79;
+}
+.accordion-group .icon-n:before {
+  content: "\6e";
+  color: #58595b;
+}
+.accordion-group .icon-o:before {
+  content: "\6f";
+  color: #1f4e79;
+}
+.accordion-group .icon-p:before {
+  content: "\70";
+  color: #1f4e79;
+}
+.accordion-group .icon-q:before {
+  content: "\71";
+  color: #1f4e79;
+}
+.accordion-group .icon-Q:before {
+  content: "\51";
+  color: #1f4e79;
+}
+.accordion-group .icon-r:before {
+  content: "\72";
+  color: #1f4e79;
+}
+.accordion-group .icon-R:before {
+  content: "\52";
+  color: #1f4e79;
+}
+.accordion-group .icon-s:before {
+  content: "\73";
+  color: #1f4e79;
+}
+.accordion-group .icon-t:before {
+  content: "\74";
+  color: #1f4e79;
+}
+.accordion-group .icon-u:before {
+  content: "\75";
+  color: #1f4e79;
+}
+.accordion-group .icon-v:before {
+  content: "\76";
+  color: #1f4e79;
+}
+.accordion-group .icon-w:before {
+  content: "\77";
+  color: #1f4e79;
+}
+.accordion-group .icon-x:before {
+  content: "\78";
+  color: #1f4e79;
+}
+.accordion-group .icon-y:before {
+  content: "\79";
+  color: #1f4e79;
+}
+.accordion-group .icon-z:before {
+  content: "\7a";
+  color: #1f4e79;
+}
+.accordion-group .icon-FF:before {
+  content: "\29";
+  color: #1f4e79;
+}
+.accordion-group .icon-aa:before {
+  content: "\28";
+  color: #1f4e79;
+}
+
+.btn-search {
+  background:url('search.png') no-repeat;
+  background-size:17px 20px;
+  background-position:5px 5px;
+}
+
+.btn-save {
+  background:url('save.png') no-repeat;
+  background-size:17px 20px;
+  background-position:5px 5px;
+}
+.btn-new {
+  border-radius: 4px;
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #fff;
+  padding: 0 10px 0 30px;
+  vertical-align: middle;
+  height: 30px;
+  cursor: pointer;
+  background-color: #1f4e79;
+
+  border: 1px solid #ccc;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+
+}
+
+
+
+/* 个人信息     退出按钮 */
+.dropdown .dropdown-toggle .icon-d:before {
+  content: "\64";
+  color: #1f4e79;
+}
+ 
+.logout .icon-m:before {
+  content: "\6d";
+  color: #1f4e79;
+}
+
+.icon-h:before {
+  content: "\68";
+  color: #1f4e79;
+}
+
+.icon-q:before {
+  content: "\71";
+  color: #1f4e79;
+}
+
+.icon-5:before {
+  content: "\35";
+  color: #1f4e79;
+}
+
+.icon-c:before {
+  content: "\63";
+  color: #1f4e79;
+}
+
+.icon-j:before {
+  content: "\6a";
+  color: #1f4e79;
+}
+
+.icon-Q:before {
+  content: "\51";
+  color: #1f4e79;
+}
+
+.icon-R:before {
+  content: "\52";
+  color: #1f4e79;
+}
+
+.icon-aa:before {
+  content: "\28";
+  color: #1f4e79;
+}
+
+.icon-d:before {
+  content: "\64";
+  color: #1f4e79;
+}
+
+.icon-9:before {
+  content: "\39";
+  color: #1f4e79;
+}
+
+.icon-o:before {
+  content: "\6f";
+  color: #1f4e79;
+}
+
+.icon-a1:before {
+  content: "\59";
+  color: #1f4e79;
+}
+
+.icon-a2:before {
+  content: "\42";
+  color: #1f4e79;
+}
+
+.icon-a3:before {
+  content: "\44";
+  color: #1f4e79;
+}
+
+.icon-a4:before {
+  content: "\4d";
+  color: #1f4e79;
+}
+
+.icon-a5:before {
+  content: "\4c";
+  color: #1f4e79;
+}
+
+.icon-a6:before {
+  content: "\45";
+  color: #1f4e79;
+}
+
+.icon-a7:before {
+  content: "\46";
+  color: #1f4e79;
+}
+
+.icon-a8:before {
+  content: "\2c";
+  color: #1f4e79;
+}
+
+.icon-a20:before {
+  content: "\38";
+  color: #1f4e79;
+}
+
+.icon-a9:before {
+  content: "\2d";
+  color: #1f4e79;
+}
+
+.icon-a10:before {
+  content: "\43";
+  color: #1f4e79;
+}
+
+.icon-s:before {
+  content: "\73";
+  color: #1f4e79;
+}
+
+.icon-g:before {
+  content: "\67";
+  color: #1f4e79;
+}
+
+.icon-right:before {
+  content: "\23";
+  color: #58595b;
+}
+
+.icon-left:before {
+  content: "\25";
+  color: #58595b;
+}
+
+.icon-up:before {
+  content: "\5e";
+  color: #58595b;
+}
+
+.icon-down:before {
+  content: "\26";
+  color: #58595b;
+}
+
+.icon-back:before {
+  content: "\37";
+  color: #58595b;
+}
+
+.icon-back1:before {
+  content: "\37";
+  color: #58595b;
+}
+
+.icon-f:before {
+  content: "\66";
+  color: #1f4e79;
+}
+
+
+.icon-blue-5:before {
+  content: "\35";
+  color: #0068b7;
+}
+
+.icon-green-4:before {
+  content: "\34";
+  color: #32b16c;
+}
+
+.icon-yellow-3:before {
+  content: "\33";
+  color: #fff100;
+}
+
+.icon-orange-2:before {
+  content: "\32";
+  color: #f39800;
+}
+
+.icon-red-1:before {
+  content: "\31";
+  color: #e60012;
+}
+

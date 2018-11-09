@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.ParamExportDao">
+    
+	<sql id="paramExportColumns">
+		a.type as type,
+		a.id as id,
+		a.paramid as paramid,
+		a.isexport as isexport
+	</sql>
+	<select id="queryParamTypeList" resultType="String">
+		SELECT type
+		FROM t_param_dictionary_${tableName} a
+		GROUP BY type order by type desc
+	</select>	
+	<select id="queryParamObjectList" resultType="ParamData">
+		SELECT 
+			<include refid="paramExportColumns"/>
+		FROM t_param_dictionary_${tableName} a
+		where type=#{type} group by paramid
+	</select>	
+	
+	<update id="updateParamCollectConfig">
+		update t_param_collect_config set type =${timeType} where id = 2
+	</update>
+	<update id="updateNewnetelementParamexportedByType">
+		update t_newnetelement set paramexported=0 where type= ${type}
+	</update>
+	
+	<update id="updateNewnetelementParamexportedById" >
+				update t_newnetelement set paramexported=1
+         	<where>
+         		f_id in 
+         		<foreach item="item" index="index" collection="netids"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>
+         	</where>
+	</update>
+	<update id="updateParamDictionary">
+		update t_param_dictionary_${tableType} set isexport=0 
+	</update>
+	<update id="updateParamDictionaryById">
+		update t_param_dictionary_${tableType} set isexport=1 
+			<where>
+         		id in 
+         		<foreach item="item" index="index" collection="ids"   
+                        open="(" separator="," close=")">  
+                       #{item}  
+               </foreach>
+         	</where>
+	</update>
+</mapper>

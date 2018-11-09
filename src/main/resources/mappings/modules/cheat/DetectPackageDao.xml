@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.DetectPackageDao">
+    
+	<sql id="detectPackageColumns">
+		a.packagename AS "name",
+		a.updatetime AS "updateTime"
+	</sql>
+    
+	<select id="get" resultType="DetectPackage">
+		SELECT 
+			<include refid="detectPackageColumns"/>
+		FROM t_cdrsub_package a 
+	</select>
+	
+	<select id="findList" resultType="DetectPackage">
+		SELECT 
+			<include refid="detectPackageColumns"/>
+		FROM t_cdrsub_package a 
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.packagename LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} 
+			</when>
+			<otherwise>
+				ORDER BY a.updatetime DESC 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		replace INTO t_cdrsub_package(
+			packagename,updatetime
+		) VALUES (
+			#{name},
+			#{updateTime}
+		)
+	</insert>
+	
+	
+</mapper>

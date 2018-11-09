@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.collectset.dao.TElementcollectDao">
+    
+	<sql id="tElementcollectColumnsUnion">
+	    a.F_NETELEMENT as "fid",
+	    b.collectorname as "collectorname"
+	</sql>
+	
+	<sql id="tElementcollectColumns">
+	    a.F_NETELEMENT as "fid"
+	</sql>
+	
+	<sql id="tElementcollectJoins">
+	    left join t_collectordeploy b on a.F_COLLECTOR = b.id
+	</sql>
+	<select id="findAllList" resultType="TElementcollect">
+		SELECT 
+			<include refid="tElementcollectColumnsUnion"/>
+		from t_elementcollect a
+		<include refid="tElementcollectJoins"/>
+		<where>
+			<if test="type != null and type != ''">
+			a.F_TYPE = #{type}
+		</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TElementcollect">
+		SELECT 
+			<include refid="tElementcollectColumns"/>
+		from t_elementcollect a
+		<where>
+		    1=1
+			<if test="type != null and type != ''">
+			and a.F_TYPE = #{type}
+			</if>
+			<if test="collectId != null and collectId != ''">
+			and a.F_COLLECTOR = #{collectId}
+			</if>
+			<if test="id != null and id != ''">
+			and a.F_NETELEMENT = #{id}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="findCollectorIp" resultType="TElementcollect">
+		SELECT 
+			b.ip as "ip"
+		from t_elementcollect a
+		<include refid="tElementcollectJoins"/>
+		<where>
+		    1=1
+			<if test="type != null and type != ''">
+			and a.F_TYPE = #{type}
+			</if>
+			<if test="collectId != null and collectId != ''">
+			and a.F_NETELEMENT = #{collectId}
+			</if>
+		</where>
+			group by b.ip
+	</select>
+	
+	
+	<insert id="insertCollect">
+		INSERT INTO t_elementcollect(
+			F_TYPE,
+			F_COLLECTOR,
+			F_NETELEMENT
+		) VALUES (
+			#{temp_field2},
+			#{collectorname},
+			#{temp_field4}
+		)
+	</insert>
+	
+	<update id="deleteHistory">
+		DELETE FROM t_elementcollect
+		WHERE F_COLLECTOR = #{collectorname}
+		and F_TYPE=#{temp_field2}
+	</update>
+	
+	
+	<select id="getCollectorIdByIp" resultType="string">
+		SELECT 
+			id
+		FROM t_collectordeploy 
+		WHERE 
+		 ip = #{ip}
+	</select>
+</mapper>

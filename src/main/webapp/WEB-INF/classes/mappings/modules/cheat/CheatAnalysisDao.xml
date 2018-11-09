@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.CheatAnalysisDao">
+    
+	<select id="queryList" resultType="CheatAnalysis" >
+<![CDATA[SELECT 
+            t.servedIMSI as imsi,
+            t.ratType as ratType,
+            SUM(t.freetotal) as freeTotal,
+			SUM(t.total) AS total,
+			(SUM(t.freetotal)/SUM(t.total)) as percent
+		 FROM
+			${netid}_${date}_cdrsubpercent t
+		 WHERE
+			t.recordtime >= #{startTime} AND t.recordtime< #{endTime}			
+		 GROUP BY 
+		    t.servedIMSI	
+		 Having 
+		    percent >= #{freePrecentThreshold}/100 AND freeTotal>= #{freeThreshold}*1024
+         ORDER BY freeTotal DESC ]]>
+	     <if test="limit!=0">
+         LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="queryListCount" resultType="Integer" >
+	SELECT 
+	    count(*)
+	FROM 
+(<![CDATA[SELECT 
+            t.servedIMSI as imsi,
+            t.ratType as ratType,
+            SUM(t.freetotal) as freeTotal,
+			SUM(t.total) AS total,
+			(SUM(t.freetotal)/SUM(t.total)) as percent
+		 FROM
+			${netid}_${date}_cdrsubpercent t
+		 WHERE
+			t.recordtime >= #{startTime} AND t.recordtime< #{endTime}			
+		 GROUP BY 
+		    t.servedIMSI	
+		 Having 
+		    percent >= #{freePrecentThreshold}/100 AND freeTotal>= #{freeThreshold}*1024]]>) t
+	</select>
+	
+	
+	<select id="queryCheatRatingGroupList" resultType="CheatRatingGroup">
+<![CDATA[	SELECT
+	  t.ratingGroup as ratingGroup,
+	  t1.name as ratingGroupName,
+	  SUM(t.dataUp) as dataUp,
+	  SUM(t.dataDown) as dataDown,
+	  (SUM(t.dataUp)+SUM(t.dataDown)) as total
+	FROM
+	  ${netid}_${date}_cdrsub t,t_ratinggroup_config t1
+	WHERE 
+	  t.recordtime >= #{startTime} AND t.recordtime< #{endTime}	AND t.servedIMSI = #{imsi} AND t.ratingGroup = t1.ratingGroup
+	GROUP BY
+	  t.ratingGroup
+	ORDER BY
+	  total DESC ]]> 
+	
+	</select>
+</mapper>

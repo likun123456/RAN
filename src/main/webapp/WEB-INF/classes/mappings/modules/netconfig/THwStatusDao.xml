@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.THwStatusDao">
+    
+	<sql id="thwStatusColumns">
+		a.netID AS "netID",
+		a.dateTime AS "dateTime",
+		a.eqL AS "eql",
+		a.eqR AS "eqr",
+		a.eqR_eqL AS "eqlAndEqr",
+		a.Type AS "type",
+		a.EqClass AS "eqClass",
+		a.AdminState AS "adminState",
+		a.OperState AS "operState",
+		a.PowerState AS "powerState",
+		a.Revision AS "revision",
+		a.BootROM AS "bootRom",
+		a.ProdNo AS "prodNo",
+		a.ProdName AS "prodName",
+		a.ManWeek AS "manWeek",
+		a.SerialNo AS "serialNo",
+		a.FSBRole AS "fsbRole"
+	</sql>
+	<insert id="batchIntert"  parameterType="java.util.List"> 
+           insert into t_vis_hw_status 
+           (netID,dateTime,eql,eqr,eqR_eqL,type,eqClass,adminState,operState,powerState,revision,bootRom,prodNo,prodName,manWeek,serialNo,fsbRole) 
+           values 
+            <foreach collection ="list" item="item" index= "index" separator =",">
+             (
+             #{item.netID}, #{item.dateTime}, #{item.eql}, #{item.eqr}, #{item.eqlAndEqr}, #{item.type}, #{item.eqClass}, #{item.adminState}, #{item.operState},
+             #{item.powerState},#{item.revision},#{item.bootRom},#{item.prodNo},#{item.prodName},#{item.manWeek},#{item.serialNo},#{item.fsbRole}
+             )
+            </foreach >
+	</insert>
+	
+	<sql id="thwStatusJoins">
+	</sql>
+	
+	<select id="get" resultType="THwStatus">
+		SELECT 
+			<include refid="thwStatusColumns"/>
+		FROM t_vis_hw_status a
+		<include refid="thwStatusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="THwStatus">
+		SELECT 
+			<include refid="thwStatusColumns"/>
+		FROM t_vis_hw_status a
+		<include refid="thwStatusJoins"/>
+		<if test="dateTime != null and dateTime != ''">
+			where a.dateTime = #{dateTime} 
+		</if>
+		<if test="netID != null and netID != ''">
+			AND a.netID = #{netID}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="THwStatus">
+		SELECT 
+			<include refid="thwStatusColumns"/>
+		FROM t_vis_hw_status a
+		<include refid="thwStatusJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

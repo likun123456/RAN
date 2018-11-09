@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cheat.dao.TCheatChineseDao">
+    
+	<sql id="tCheatChineseColumns">
+		a.id AS "id",
+		a.cheatcase AS "cheatCase",
+		a.cheatcasechinese AS "cheatCaseChinese",
+		a.loopholetype AS "loopholeType",
+		a.cheatprinciple AS "cheatPrinciple",
+		a.cheatscene AS "cheatScene",
+		a.cheatsceneanalysis AS "cheatSceneAnalysis",
+		a.solution AS "solution"
+	</sql>
+	
+	<sql id="tCheatChineseJoins">
+	</sql>
+    
+	<select id="get" resultType="TCheatChinese">
+		SELECT 
+			<include refid="tCheatChineseColumns"/>
+		FROM t_cheat_chinese a
+		<include refid="tCheatChineseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCheatChinese">
+		SELECT 
+			<include refid="tCheatChineseColumns"/>
+		FROM t_cheat_chinese a
+		<include refid="tCheatChineseJoins"/>
+		<where>
+			<if test="cheatCase != null and cheatCase != ''">
+				AND a.cheatCase LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cheatCase}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cheatCase}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cheatCase},'%')</if>
+			</if>
+			
+			<if test="cheatCaseChinese != null and cheatCaseChinese != ''">
+				AND a.cheatCaseChinese LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cheatCaseChinese}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cheatCaseChinese}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cheatCaseChinese},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCheatChinese">
+		SELECT 
+			<include refid="tCheatChineseColumns"/>
+		FROM t_cheat_chinese a
+		<include refid="tCheatChineseJoins"/>
+		<where>
+			<if test="cheatCase != null and cheatCase != ''">
+				AND a.cheatCase LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cheatCase}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cheatCase}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cheatCase},'%')</if>
+			</if>
+			
+			<if test="cheatCaseChinese != null and cheatCaseChinese != ''">
+				AND a.cheatCaseChinese LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cheatCaseChinese}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cheatCaseChinese}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cheatCaseChinese},'%')</if>
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cheat_chinese(
+			cheatcase,
+			cheatcasechinese,
+			loopholetype,
+			cheatprinciple,
+			cheatscene,
+			cheatsceneanalysis,
+			solution
+		) VALUES (
+			#{cheatCase},
+			#{cheatCaseChinese},
+			#{loopholeType},
+			#{cheatPrinciple},
+			#{cheatScene},
+			#{cheatSceneAnalysis},
+			#{solution}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cheat_chinese SET 	
+			cheatcase = #{cheatCase},
+			cheatcasechinese = #{cheatCaseChinese},
+			loopholetype = #{loopholeType},
+			cheatprinciple = #{cheatPrinciple},
+			cheatscene = #{cheatScene},
+			cheatsceneanalysis = #{cheatSceneAnalysis},
+			solution = #{solution}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cheat_chinese
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

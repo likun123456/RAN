@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.propertycheck.dao.RanPropertyEquipmentDao">
+    
+	<sql id="ranPropertyEquipmentColumns">
+		a.id AS "id",
+		a.serialnumber AS "serialnumber",
+		a.sitename AS "sitename",
+		a.managerobject AS "managerobject",
+		a.productname AS "productname",
+		a.productnumber AS "productnumber",
+		a.productionrevision AS "productionrevision",
+		a.productiondate AS "productiondate",
+		a.manufacturerid AS "manufacturerid",
+		a.manufacturerrevision AS "manufacturerrevision",
+		a.negotiatedbitrate AS "negotiatedbitrate",
+		a.status AS "status",
+		a.logdate AS "logdate",
+		a.mocategory AS "mocategory",
+		a.extendfield AS "extendfield"
+	</sql>
+	
+	<sql id="ranPropertyEquipmentJoins">
+	</sql>
+    
+	<select id="get" resultType="RanPropertyEquipment">
+		SELECT 
+			<include refid="ranPropertyEquipmentColumns"/>
+		FROM ran_property_equipment a
+		<include refid="ranPropertyEquipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RanPropertyEquipment">
+		SELECT 
+			<include refid="ranPropertyEquipmentColumns"/>
+		FROM ran_property_equipment a
+		<include refid="ranPropertyEquipmentJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RanPropertyEquipment">
+		SELECT 
+			<include refid="ranPropertyEquipmentColumns"/>
+		FROM ran_property_equipment a
+		<include refid="ranPropertyEquipmentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ran_property_equipment(
+			id,
+			serialnumber,
+			sitename,
+			managerobject,
+			productname,
+			productnumber,
+			productionrevision,
+			productiondate,
+			manufacturerid,
+			manufacturerrevision,
+			negotiatedbitrate,
+			status,
+			logdate,
+			mocategory,
+			extendfield
+		) VALUES (
+			#{id},
+			#{serialnumber},
+			#{sitename},
+			#{managerobject},
+			#{productname},
+			#{productnumber},
+			#{productionrevision},
+			#{productiondate},
+			#{manufacturerid},
+			#{manufacturerrevision},
+			#{negotiatedbitrate},
+			#{status},
+			#{logdate},
+			#{mocategory},
+			#{extendfield}
+		)
+	</insert>
+	<!--批量插入log  -->
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO ran_property_equipment(
+			id,
+			serialnumber,
+			sitename,
+			managerobject,
+			productname,
+			productnumber,
+			productionrevision,
+			productiondate,
+			manufacturerid,
+			manufacturerrevision,
+			negotiatedbitrate,
+			status,
+			logdate,
+			mocategory,
+			extendfield
+		)VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.serialnumber},
+			#{item.sitename},
+			#{item.managerobject},
+			#{item.productname},
+			#{item.productnumber},
+			#{item.productionrevision},
+			#{item.productiondate},
+			#{item.manufacturerid},
+			#{item.manufacturerrevision},
+			#{item.negotiatedbitrate},
+			#{item.status},
+			#{item.logdate},
+			#{item.mocategory},
+			#{item.extendfield}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="update">
+		UPDATE ran_property_equipment SET 	
+			serialnumber = #{serialnumber},
+			sitename = #{sitename},
+			managerobject = #{managerobject},
+			productname = #{productname},
+			productnumber = #{productnumber},
+			productionrevision = #{productionrevision},
+			productiondate = #{productiondate},
+			manufacturerid = #{manufacturerid},
+			manufacturerrevision = #{manufacturerrevision},
+			negotiatedbitrate = #{negotiatedbitrate},
+			status = #{status},
+			logdate = #{logdate},
+			mocategory = #{mocategory},
+			extendfield = #{extendfield}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ran_property_equipment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.paramconfig.dao.ParamPackageManagerDao">
+    
+	<sql id="paramPackageColumns">
+		a.packagename AS "packagename",
+		a.nettype AS "nettype",
+		a.version AS "version",
+		a.updatetime AS "updatetime"
+	</sql>
+    
+	<select id="get" resultType="ParamPackage">
+		SELECT 
+			<include refid="paramPackageColumns"/>
+		FROM t_param_package a 
+	</select>
+	
+	<select id="findList" resultType="ParamPackage">
+		SELECT 
+			<include refid="paramPackageColumns"/>
+		FROM t_param_package a 
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} 
+			</when>
+			<otherwise>
+				ORDER BY a.updatetime DESC 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		replace INTO t_param_package(
+			nettype,packagename,version,updatetime
+		) VALUES (
+			#{nettype},
+			#{packagename},
+			#{version},
+			#{updatetime}
+		)
+	</insert>
+	
+	<insert id="batchIntertDictionary"  parameterType="java.util.Map"> 
+	    <!-- <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                SELECT LAST_INSERT_ID()
+         </selectKey > -->
+           insert into t_param_dictionary_${tableRemark}
+           (version,paramid,name,cnname,type,description,endescription,applyrange,valuerange,memo,defaultvalue,suggestvalue,paramidextend)
+           values
+            <foreach collection ="list" item="item" index= "index" separator =",">
+                (
+                #{item.version}, #{item.paramid}, #{item.name}, #{item.cnname}, #{item.type}, #{item.description}, #{item.endescription}, #{item.applyrange}, #{item.valuerange}, #{item.memo}, #{item.defaultvalue}, #{item.suggestvalue}, #{item.paramidextend}
+                )
+            </foreach >
+	</insert>
+	
+	<update id="deleteDictionaryByVersion">
+		delete from t_param_dictionary_${tableRemark} where version=#{version}
+	</update>
+	
+</mapper>

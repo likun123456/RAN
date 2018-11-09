@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.autocheck.dao.TAutoTemplateCheckConfigDao">
+    
+	<sql id="tAutoTemplateCheckConfigColumns">
+		a.id AS "id",
+		a.net_type AS "netType",
+		a.excelId AS "excelId",
+		a.moduleId AS "moduleId",
+		a.item_name AS "itemName"
+	</sql>
+	
+	<sql id="tAutoTemplateCheckConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TAutoTemplateCheckConfig">
+		SELECT 
+			<include refid="tAutoTemplateCheckConfigColumns"/>
+		FROM t_auto_template_check_config a
+		<include refid="tAutoTemplateCheckConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAutoTemplateCheckConfig">
+		SELECT 
+			<include refid="tAutoTemplateCheckConfigColumns"/>
+		FROM t_auto_template_check_config a
+		<include refid="tAutoTemplateCheckConfigJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAutoTemplateCheckConfig">
+		SELECT 
+			<include refid="tAutoTemplateCheckConfigColumns"/>
+		FROM t_auto_template_check_config a
+		<include refid="tAutoTemplateCheckConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_auto_template_check_config(
+			net_type,
+			excelId,
+			moduleId,
+			item_name
+		) VALUES (
+			#{netType},
+			#{excelId},
+			#{moduleId},
+			#{itemName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_auto_template_check_config SET 	
+			net_type = #{netType},
+			excelId = #{excelId},
+			moduleId = #{moduleId},
+			item_name = #{itemName}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="delete">
+		DELETE FROM t_auto_template_check_config
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteAll">
+		DELETE FROM t_auto_template_check_config
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TIndexKpiDao">
+    
+	<sql id="tIndexKpiColumns">
+		a.id AS "id",
+		a.mmekpione AS "mmekpione",
+		a.mmekpitwo AS "mmekpitwo",
+		a.mmekpithree AS "mmekpithree",
+		a.mmekpifour AS "mmekpifour",
+		a.mmekpifive AS "mmekpifive",
+		a.mmekpisix AS "mmekpisix",
+		
+		a.saegwkpione AS "saegwkpione",
+		a.saegwkpitwo AS "saegwkpitwo",
+		a.saegwkpithree AS "saegwkpithree",
+		a.saegwkpifour AS "saegwkpifour",
+		a.saegwkpifive AS "saegwkpifive",
+		a.saegwkpisix AS "saegwkpisix",
+		
+		a.pcrfkpione AS "pcrfkpione",
+		a.pcrfkpitwo AS "pcrfkpitwo",
+		a.pcrfkpithree AS "pcrfkpithree",
+		a.pcrfkpifour AS "pcrfkpifour",
+		a.pcrfkpifive AS "pcrfkpifive",
+		a.pcrfkpisix AS "pcrfkpisix",
+		
+		a.msckpione AS "msckpione",
+		a.msckpitwo AS "msckpitwo",
+		a.msckpithree AS "msckpithree",
+		a.msckpifour AS "msckpifour",
+		a.msckpifive AS "msckpifive",
+		a.msckpisix AS "msckpisix",
+		
+		a.mgwkpione AS "mgwkpione",
+		a.mgwkpitwo AS "mgwkpitwo",
+		a.mgwkpithree AS "mgwkpithree",
+		a.mgwkpifour AS "mgwkpifour",
+		a.mgwkpifive AS "mgwkpifive",
+		a.mgwkpisix AS "mgwkpisix",
+		
+		a.hlrfekpione AS "hlrfekpione",
+		a.hlrfekpitwo AS "hlrfekpitwo",
+		a.hlrfekpithree AS "hlrfekpithree",
+		a.hlrfekpifour AS "hlrfekpifour",
+		a.hlrfekpifive AS "hlrfekpifive",
+		a.hlrfekpisix AS "hlrfekpisix",
+		
+		a.hsskpione AS "hsskpione",
+		a.hsskpitwo AS "hsskpitwo",
+		a.hsskpithree AS "hsskpithree",
+		a.hsskpifour AS "hsskpifour",
+		a.hsskpifive AS "hsskpifive",
+		a.hsskpisix AS "hsskpisix",
+		
+		a.cudbkpione AS "cudbkpione",
+		a.cudbkpitwo AS "cudbkpitwo",
+		a.cudbkpithree AS "cudbkpithree",
+		a.cudbkpifour AS "cudbkpifour",
+		a.cudbkpifive AS "cudbkpifive",
+		a.cudbkpisix AS "cudbkpisix",
+		
+		a.pgkpione AS "pgkpione",
+		a.pgkpitwo AS "pgkpitwo",
+		a.pgkpithree AS "pgkpithree",
+		a.pgkpifour AS "pgkpifour",
+		a.pgkpifive AS "pgkpifive",
+		a.pgkpisix AS "pgkpisix",
+		
+		a.starttime AS "starttime"
+	</sql>
+    
+	<select id="get" resultType="TIndexKpi">
+		SELECT 
+			<include refid="tIndexKpiColumns"/>
+		FROM t_indexkpi a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TIndexKpi">
+		SELECT 
+			<include refid="tIndexKpiColumns"/>
+		FROM t_indexkpi a
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_indexkpi(
+			mmekpione,
+			mmekpitwo,
+			mmekpithree,
+			mmekpifour,
+			mmekpifive,
+			mmekpisix,
+			saegwkpione,
+			saegwkpitwo,
+			saegwkpithree,
+			saegwkpifour,
+			saegwkpifive,
+			saegwkpisix,
+			pcrfkpione,
+			pcrfkpitwo,
+			pcrfkpithree,
+			pcrfkpifour,
+			pcrfkpifive,
+			pcrfkpisix,
+			msckpione,
+		   	msckpitwo,
+			msckpithree,
+			msckpifour,
+			msckpifive,
+			msckpisix,
+			
+			mgwkpione,
+			mgwkpitwo,
+			mgwkpithree,
+			mgwkpifour,
+			mgwkpifive,
+			mgwkpisix,
+			
+			hlrfekpione,
+			hlrfekpitwo,
+			hlrfekpithree,
+			hlrfekpifour,
+			hlrfekpifive,
+			hlrfekpisix,
+			
+			hsskpione,
+			hsskpitwo,
+			hsskpithree,
+			hsskpifour,
+			hsskpifive,
+			hsskpisix,
+			
+			cudbkpione,
+			cudbkpitwo,
+			cudbkpithree,
+			cudbkpifour,
+			cudbkpifive,
+			cudbkpisix,
+			
+			pgkpione,
+			pgkpitwo,
+			pgkpithree,
+			pgkpifour,
+			pgkpifive,
+			pgkpisix,
+			starttime
+		) VALUES (
+			#{mmekpione},
+			#{mmekpitwo},
+			#{mmekpithree},
+			#{mmekpifour},
+			#{mmekpifive},
+			#{mmekpisix},
+			#{saegwkpione},
+			#{saegwkpitwo},
+			#{saegwkpithree},
+			#{saegwkpifour},
+			#{saegwkpifive},
+			#{saegwkpisix},
+			#{pcrfkpione},
+			#{pcrfkpitwo},
+			#{pcrfkpithree},
+			#{pcrfkpifour},
+			#{pcrfkpifive},
+			#{pcrfkpisix},
+			#{msckpione},
+		    #{msckpitwo},
+			#{msckpithree},
+			#{msckpifour},
+			#{msckpifive},
+			#{msckpisix},
+			
+			#{mgwkpione},
+			#{mgwkpitwo},
+			#{mgwkpithree},
+			#{mgwkpifour},
+			#{mgwkpifive},
+			#{mgwkpisix},
+			
+			#{hlrfekpione},
+			#{hlrfekpitwo},
+			#{hlrfekpithree},
+			#{hlrfekpifour},
+			#{hlrfekpifive},
+			#{hlrfekpisix},
+			
+			#{hsskpione},
+			#{hsskpitwo},
+			#{hsskpithree},
+			#{hsskpifour},
+			#{hsskpifive},
+			#{hsskpisix},
+			
+			#{cudbkpione},
+			#{cudbkpitwo},
+			#{cudbkpithree},
+			#{cudbkpifour},
+			#{cudbkpifive},
+			#{cudbkpisix},
+			
+			#{pgkpione},
+			#{pgkpitwo},
+			#{pgkpithree},
+			#{pgkpifour},
+			#{pgkpifive},
+			#{pgkpisix},
+			#{starttime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_indexkpi SET 	
+			mmekpione = #{mmekpione},
+			mmekpitwo = #{mmekpitwo},
+			mmekpithree = #{mmekpithree},
+			mmekpifour = #{mmekpifour},
+			mmekpifive = #{mmekpifive},
+			mmekpisix = #{mmekpisix},
+			saegwkpione = #{saegwkpione},
+			saegwkpitwo = #{saegwkpitwo},
+			saegwkpithree = #{saegwkpithree},
+			saegwkpifour = #{saegwkpifour},
+			saegwkpifive = #{saegwkpifive},
+			saegwkpisix = #{saegwkpisix},
+			pcrfkpione = #{pcrfkpione},
+			pcrfkpitwo = #{pcrfkpitwo},
+			pcrfkpithree = #{pcrfkpithree},
+			pcrfkpifour = #{pcrfkpifour},
+			pcrfkpifive = #{pcrfkpifive},
+			pcrfkpisix = #{pcrfkpisix},
+			
+			msckpione = #{msckpione},
+		    msckpitwo = #{msckpitwo},
+			msckpithree = #{msckpithree},
+			msckpifour = #{msckpifour},
+			msckpifive = #{msckpifive},
+			msckpisix = #{msckpisix},
+			
+			mgwkpione = #{mgwkpione},
+			mgwkpitwo = #{mgwkpitwo},
+			mgwkpithree = #{mgwkpithree},
+			mgwkpifour = #{mgwkpifour},
+			mgwkpifive = #{mgwkpifive},
+			mgwkpisix = #{mgwkpisix},
+			
+			hlrfekpione = #{hlrfekpione},
+			hlrfekpitwo = #{hlrfekpitwo},
+			hlrfekpithree = #{hlrfekpithree},
+			hlrfekpifour = #{hlrfekpifour},
+			hlrfekpifive = #{hlrfekpifive},
+			hlrfekpisix = #{hlrfekpisix},
+			
+			hsskpione = #{hsskpione},
+			hsskpitwo = #{hsskpitwo},
+			hsskpithree = #{hsskpithree},
+			hsskpifour = #{hsskpifour},
+			hsskpifive = #{hsskpifive},
+			hsskpisix = #{hsskpisix},
+			
+			cudbkpione = #{cudbkpione},
+			cudbkpitwo = #{cudbkpitwo},
+			cudbkpithree = #{cudbkpithree},
+			cudbkpifour = #{cudbkpifour},
+			cudbkpifive = #{cudbkpifive},
+			cudbkpisix = #{cudbkpisix},
+			
+			pgkpione = #{pgkpione},
+			pgkpitwo = #{pgkpitwo},
+			pgkpithree = #{pgkpithree},
+			pgkpifour = #{pgkpifour},
+			pgkpifive = #{pgkpifive},
+			pgkpisix = #{pgkpisix},
+			starttime = #{starttime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_indexkpi
+		WHERE id = #{id}
+	</update>
+</mapper>

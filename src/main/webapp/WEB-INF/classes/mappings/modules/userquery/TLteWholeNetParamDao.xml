@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TLteWholeNetParamDao">
+    
+	<update id="delete">
+		truncate table t_lte_whole_net_param
+	</update>
+	
+	<insert id="batchIntert"  parameterType="java.util.Map"> 
+	    <!-- <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                SELECT LAST_INSERT_ID()
+         </selectKey > -->
+           insert into t_lte_whole_net_param 
+           (eci,factory,station_no,station_name,enodeb_id,longitude,latitude) 
+           values 
+            <foreach collection ="map" item="value" index= "key" separator =",">
+             (
+             #{key}, #{value.factory},#{value.stationNo}, #{value.stationName},#{value.enodebId},#{value.longitude},#{value.latitude}
+             )
+            </foreach >
+	</insert>
+	
+	<resultMap id="LteWholeNetParamMap" type="TLteWholeNetParam">
+        <result property="factory" column="factory" />
+        <result property="stationNo" column="station_no" />
+        <result property="stationName" column="station_name" />
+        <result property="enodebId" column="enodeb_id" />
+    </resultMap>
+    
+	<select id="getLteWholeNetParamMap" resultMap="LteWholeNetParamMap" resultType="map">
+	   select eci,factory,station_no,station_name,enodeb_id from t_lte_whole_net_param
+	</select>
+	
+	<select id="getLteWholeNetParamList" resultType="TLteWholeNetParam">
+	   select eci,factory,station_no,station_name,enodeb_id from t_lte_whole_net_param
+	</select>
+	
+	<select id="getList" resultType="TLteWholeNetParam">
+	    <![CDATA[select t1.eci,t1.factory,t1.station_no stationNo,t1.station_name stationName,t1.enodeb_id enodebId,t1.longitude,t1.latitude,t2.FAILURE_COUNT failureCount, t2.TOTAL_COUNT totalCount, t2.SUCCESS_RATE successRate from 
+	   (
+	   	select t.* from t_lte_whole_net_param t where t.longitude>#{minLongitude} and t.longitude<#{maxLongitude} and t.latitude>#{minLatitude} and t.latitude<#{maxLatitude}
+	   ) t1 join 
+	   (select * from t_${eventType}_eci_pool_success_rate_${date} t where t.datetime = #{recentMoment} and POOLID=#{pool}) t2 
+	   on t1.eci=t2.ECI ]]>
+	   <!-- select eci,factory,station_no,station_name,enodeb_id,longitude,latitude from t_lte_whole_net_param where longitude is not NULL and latitude is not NULL -->
+	</select>
+	
+	<select id="getCollectByPool" resultType="map">
+		select t1.f_id,t1.f_name,t2.F_COLLECTOR,t3.ip from t_newnetelement t1 JOIN t_elementcollect t2 ON t1.f_id=t2.F_NETELEMENT JOIN t_collectordeploy t3 on t2.F_COLLECTOR=t3.id where t1.f_nid=#{poolId} and t2.F_TYPE=#{fType} order by t2.F_COLLECTOR ASC
+	</select>
+	
+	<select id="queryRecentMoment" resultType="String">
+	    <![CDATA[select MAX(a.DATETIME) FROM t_${eventType}_eci_pool_success_rate_${date} a where a.POOLID=#{pool}]]>
+	</select>
+	
+</mapper>

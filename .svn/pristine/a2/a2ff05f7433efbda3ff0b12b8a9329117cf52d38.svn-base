@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TIndexKpiEventDao">
+    
+	<sql id="tIndexKpiEventColumns">
+		a.id AS "id",
+		a.kpi AS "kpi",
+		a.event AS "event"
+	</sql>
+    
+	<select id="get" resultType="TIndexKpiEvent">
+		SELECT 
+			<include refid="tIndexKpiEventColumns"/>
+		FROM t_indexkpievent a
+		<where>			
+			<if test="id != null and id != ''">
+				AND id = ${id}
+			</if>
+			<if test="kpi != null and kpi != ''">
+				AND kpi = ${kpi}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TIndexKpiEvent">
+		SELECT 
+			<include refid="tIndexKpiEventColumns"/>
+		FROM t_indexkpievent a
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="kpi != null and kpi != ''">
+				AND a.kpi LIKE 
+					<if test="dbName == 'oracle'">'%'||#{kpi}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{kpi}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{kpi},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_indexkpievent(
+			kpi,
+			event
+		) VALUES (
+			#{kpi},
+			#{event}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_indexkpievent SET 	
+			kpi = #{kpi},
+			event = #{event}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_indexkpievent
+		<where>			
+			<if test="id != null and id != ''">
+				AND id = ${id}
+			</if>
+			<if test="kpi != null and kpi != ''">
+				AND kpi = ${kpi}
+			</if>
+		</where>
+	</update>
+</mapper>

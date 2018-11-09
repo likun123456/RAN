@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TTacSuccessRateDao">
+    
+	<sql id="TTacSuccessRateColumns">
+		a.netid AS "netid",
+		a.datetime AS "datetime",
+		a.tac AS "tac",
+		a.failure_count AS "failure_count",
+		a.total_count AS "total_count",
+		a.success_rate AS "success_rate"
+	</sql>
+	
+	<sql id="TTacSuccessRateJoins">
+	</sql>
+    
+	<select id="get" resultType="TTacSuccessRate">
+		SELECT 
+			<include refid="TTacSuccessRateColumns"/>
+		FROM t_att_tac_success_rate a
+		<include refid="TTacSuccessRateJoins"/>
+		WHERE a.id = #{id}
+	</select>	
+    
+	<select id="getEbmEventlist" resultType="TEbmEvent" >
+	    SELECT t.eventname,t.eventfullname FROM t_ebmlog_event t WHERE t.flag = 1
+	    <if test="netType != null and netType != ''">
+	        and t.netType = #{netType}
+	    </if>
+	</select>
+	
+	<select id="queryList" resultType="TTacSuccessRate" >
+<![CDATA[SELECT n.f_name as fname,t.datetime,t.tac,sum(t.failure_count) as failureCount,sum(t.total_count) as totalCount,avg(t.success_rate) as successRate 
+         FROM t_${eventType}_tac_success_rate_${date} t,t_newnetelement n
+         WHERE t.netid = n.f_id and t.netid = #{netid} and t.datetime >= #{startTime}  and t.datetime < #{endTime} 
+         GROUP BY t.tac]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY avg(success_rate) 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+		<select id="queryListCount" resultType="Integer" >
+SELECT count(*) from (
+<![CDATA[SELECT n.f_name as fname,t.datetime,t.tac,sum(t.failure_count) as failureCount,sum(t.total_count) as totalCount,avg(t.success_rate) as successRate 
+         FROM t_${eventType}_tac_success_rate_${date} t,t_newnetelement n
+         WHERE t.netid = n.f_id and t.netid = #{netid} and t.datetime >= #{startTime}  and t.datetime < #{endTime} 
+         GROUP BY t.tac]]>
+       ) t
+	</select>
+	
+	
+	<select id="queryLnList" resultType="TTacSuccessRate" >
+<![CDATA[SELECT t.netid,t.datetime,t.tac,sum(t.failure_count) as failureCount,sum(t.total_count) as totalCount,avg(t.success_rate) as successRate 
+         FROM t_${eventType}_tac_success_rate_${date} t
+         WHERE t.netid = #{netid} and t.datetime >= #{startTime}  and t.datetime < #{endTime} 
+         GROUP BY t.tac]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY avg(success_rate) 
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+		<select id="queryLnListCount" resultType="Integer" >
+SELECT count(*) from (
+<![CDATA[SELECT t.datetime,t.tac,sum(t.failure_count) as failureCount,sum(t.total_count) as totalCount,avg(t.success_rate) as successRate 
+         FROM t_${eventType}_tac_success_rate_${date} t
+         WHERE t.netid = #{netid} and t.datetime >= #{startTime}  and t.datetime < #{endTime} 
+         GROUP BY t.tac]]>
+       ) t
+	</select>
+	
+</mapper>

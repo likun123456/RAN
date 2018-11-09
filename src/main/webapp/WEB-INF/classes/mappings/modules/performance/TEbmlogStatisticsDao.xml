@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.performance.dao.TEbmlogStatisticsDao">
+    
+	<sql id="tEbmlogStatisticsColumns">
+		a.netid AS "netid",
+		a.datetime AS "datetime",
+		a.causecode AS "causecode",
+		a.subcausecode AS "subcausecode",
+		a.cc AS "cc",
+		a.scc AS "scc",
+		a.cc_plus_scc AS "ccPlusScc",
+		a.k_name AS "kName",
+		a.k_key AS "kKey",
+		a.k_value AS "kValue"
+	</sql>
+	
+	<sql id="tEbmlogStatisticsJoins">
+	</sql>
+    
+	<select id="get" resultType="TEbmlogStatistics">
+		SELECT 
+			<include refid="tEbmlogStatisticsColumns"/>
+		FROM t_att_ebmlog_statistics a
+		<include refid="tEbmlogStatisticsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="queryList" resultType="TEbmlogStatistics" >
+<![CDATA[SELECT 
+            CONCAT(b.CAUSECODE,IFNULL(b.cc,''))  as CAUSECODE,
+            CONCAT(b.SUBCAUSECODE,IFNULL(b.scc,'')) as SUBCAUSECODE,
+            b.NETID,
+			t1.cc_description AS cc,
+			t2.scc_description AS scc,
+			t2.action,
+			t2.domain,
+			b.failures,
+			b.reject,
+			b.abort,
+			b.`ignore`
+		 FROM
+			(
+				SELECT
+					a.CAUSECODE,
+					a.SUBCAUSECODE,
+					a.cc,
+					a.scc,
+					a.NETID,
+					sum(a.k_value) AS failures,
+					sum(a.k_reject) AS reject,
+					sum(a.k_abort) AS abort,
+					sum(a.k_ignore) AS `ignore`
+				FROM
+					(
+						SELECT
+							CAUSECODE,
+							SUBCAUSECODE,
+							cc,
+							scc,
+							NETID,
+							CC_PLUS_SCC,
+							k_value,
+							k_reject,
+							k_abort,
+							k_ignore
+						FROM
+							t_${eventType}_ebmlog_statistics_${date}
+						WHERE
+							netid = #{netid}
+						AND K_NAME = 'TAC'
+						AND DATETIME >= #{startTime}
+						AND DATETIME < #{endTime}
+					) a
+				GROUP BY
+					a.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+        ORDER BY failures DESC 
+	    <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="querySaegwList" resultType="TEbmlogStatistics" >
+<![CDATA[SELECT 
+            CONCAT(b.CAUSECODE,IFNULL(b.cc,''))  as CAUSECODE,
+            CONCAT(b.SUBCAUSECODE,IFNULL(b.scc,'')) as SUBCAUSECODE,
+            b.NETID,
+			t1.cc_description AS cc,
+			t2.scc_description AS scc,
+			t2.action,
+			t2.domain,
+			b.failures,
+			b.reject,
+			b.abort,
+			b.`ignore`
+		 FROM
+			(
+				SELECT
+					a.CAUSECODE,
+					a.SUBCAUSECODE,
+					a.cc,
+					a.scc,
+					a.NETID,
+					sum(a.k_value) AS failures,
+					sum(a.k_reject) AS reject,
+					sum(a.k_abort) AS abort,
+					sum(a.k_ignore) AS `ignore`
+				FROM
+					(
+						SELECT
+							CAUSECODE,
+							SUBCAUSECODE,
+							cc,
+							scc,
+							NETID,
+							CC_PLUS_SCC,
+							k_value,
+							k_reject,
+							k_abort,
+							k_ignore
+						FROM
+							t_${eventType}_ebmlog_statistics_${date}
+						WHERE
+							netid = #{netid}
+						AND K_NAME = 'MSISDN'
+						AND DATETIME >= #{startTime}
+						AND DATETIME < #{endTime}
+					) a
+				GROUP BY
+					a.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+        ORDER BY failures DESC 
+	    <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="queryListCount" resultType="Integer" >
+<![CDATA[SELECT 
+            count(*)
+		 FROM
+			(
+				SELECT
+					a.CAUSECODE,
+					a.SUBCAUSECODE,
+					a.cc,
+					a.scc,
+					a.NETID,
+					sum(a.k_value) AS failures
+				FROM
+					(
+						SELECT
+							CAUSECODE,
+							SUBCAUSECODE,
+							cc,
+							scc,
+							NETID,
+							CC_PLUS_SCC,
+							k_value
+						FROM
+							t_${eventType}_ebmlog_statistics_${date}
+						WHERE
+							netid = #{netid}
+						AND K_NAME = 'TAC'
+						AND DATETIME >= #{startTime}
+						AND DATETIME < #{endTime}
+					) a
+				GROUP BY
+					a.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+	</select>
+	
+	<select id="queryPcrfList" resultType="TEbmlogStatistics" >
+<![CDATA[      
+         SELECT 
+            b.CAUSECODE as CAUSECODE,
+            b.NETID,
+			t1.cc_description AS cc,
+			b.failures
+		 FROM
+               (
+				SELECT
+					a.CAUSECODE as CAUSECODE,
+					a.NETID,
+					sum(a.k_value) AS failures
+				FROM
+					(
+						SELECT
+							CAUSECODE,
+							NETID,
+							k_value
+						FROM
+							t_${eventType}_ebmlog_statistics_${date}
+						WHERE
+							netid = #{netid}
+						AND K_NAME = 'duration'
+						AND DATETIME >= #{startTime}
+						AND DATETIME < #{endTime}
+					) a
+				GROUP BY
+					a.CAUSECODE
+				) b
+			LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+			AND t1.cc = b.CAUSECODE
+			AND t1.netid = #{netid}
+		]]>
+        ORDER BY failures DESC 
+	    <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	
+	<select id="queryPcrfListCount" resultType="Integer" >
+<![CDATA[
+         select
+           count(*)
+           from(
+				SELECT
+					a.CAUSECODE as CAUSECODE,
+					a.NETID,
+					sum(a.k_value) AS failures
+				FROM
+					(
+						SELECT
+							CAUSECODE,
+							NETID,
+							k_value
+						FROM
+							t_${eventType}_ebmlog_statistics_${date}
+						WHERE
+							netid = #{netid}
+						AND K_NAME = 'duration'
+						AND DATETIME >= #{startTime}
+						AND DATETIME < #{endTime}
+					) a
+				GROUP BY
+					a.CAUSECODE
+		) t
+		]]>
+	</select>
+	
+	<select id="getDimensionPcrflistByKey" resultType="TDimensionVO">
+	<![CDATA[SELECT
+	        t.k_key AS obj,
+	        sum(t.k_value) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     WHERE
+	        t.netid = #{netid}
+	       AND datetime >= #{startTime}
+		   AND datetime < #{endTime} 
+		   AND t.causecode = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+	</select>
+	
+	
+	<select id="getDimensionlistByKey" resultType="TDimensionVO">
+    <choose>
+      <when test="str=='ECI'">
+<![CDATA[SELECT
+            ifnull(
+              CONCAT(
+                 t1.station_name,
+                 '(',
+				 t.K_KEY,
+				 ')'            
+              ),
+              t.K_KEY
+            ) AS obj,
+	        sum(t.k_value) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     LEFT JOIN t_lte_whole_net_param t1 ON t.K_KEY = t1.ECI
+	     WHERE
+	        t.netid = #{netid}
+	       AND t.datetime >= #{startTime}
+		   AND t.datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</when> 
+ <!-- <when test="str=='ECI'">
+<![CDATA[SELECT
+			  a.obj,
+			  a.failures,
+			  b.totalCount,
+			  a.failures/b.totalCount as successRate
+	     FROM
+	     (SELECT
+			  t.k_key AS obj,
+			  sum(t.k_${statisticType}) AS failures
+			FROM
+				t_${eventType}_ebmlog_statistics_${date} t
+			WHERE
+				t.netid = #{netid}
+			AND datetime >= #{startTime}
+			AND datetime < #{endTime} 
+			AND t.cc_plus_scc = #{parm}
+			AND t.k_name = #{str}
+			GROUP BY
+				t.k_key) a,
+	     (SELECT
+				t1.netid,
+				t1.datetime,
+				t1.eci,
+				sum(t1.total_count) AS totalCount
+			FROM
+				t_${eventType}_eci_success_rate_${date} t1
+			WHERE
+				t1.netid = #{netid}
+			AND t1.datetime >= #{startTime}
+			AND t1.datetime < #{endTime} 
+			GROUP BY
+				t1.eci) b 
+			WHERE a.obj = b.eci
+			ORDER BY failures DESC
+	        ]]> 		
+		</when> -->
+<when test="str=='TAC'">
+<![CDATA[SELECT
+			  a.obj,
+			  a.failures,
+			  b.totalCount,
+			  a.failures/b.totalCount as successRate
+	     FROM
+	     (SELECT
+			  t.k_key AS obj,
+			  sum(t.k_${statisticType}) AS failures
+			FROM
+				t_${eventType}_ebmlog_statistics_${date} t
+			WHERE
+				t.netid = #{netid}
+			AND datetime >= #{startTime}
+			AND datetime < #{endTime} 
+			AND t.cc_plus_scc = #{parm}
+			AND t.k_name = #{str}
+			GROUP BY
+				t.k_key) a,
+	     (SELECT
+				t1.netid,
+				t1.datetime,
+				t1.tac,
+				sum(t1.total_count) AS totalCount
+			FROM
+				t_${eventType}_tac_success_rate_${date} t1
+			WHERE
+				t1.netid = #{netid}
+			AND t1.datetime >= #{startTime}
+			AND t1.datetime < #{endTime} 
+			GROUP BY
+				t1.tac) b 
+			WHERE a.obj = b.tac
+			ORDER BY failures DESC
+	        ]]> 		
+		</when>
+		<when test="str=='IMEITAC'">
+<![CDATA[SELECT
+            ifnull(
+              t1.PhoneName,
+              CONCAT(
+                 'UNKNOWN UE [IMEI TAC ',
+				 t.K_KEY,
+				 ']'              
+              )
+            ) AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     LEFT JOIN t_imeitac_translate t1 ON t.K_KEY = t1.IMEITAC
+	     WHERE
+	        t.netid = #{netid}
+	       AND t.datetime >= #{startTime}
+		   AND t.datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t1.PhoneName
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</when>
+		<when test="str=='SGW'||str=='PGW'">
+<![CDATA[SELECT
+            ifnull(
+              t1.name,
+			  t.K_KEY
+            ) AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     LEFT JOIN t_user_signal_host_config t1 ON t.K_KEY = t1.IP
+	     WHERE
+	        t.netid = #{netid}
+	       AND t.datetime >= #{startTime}
+		   AND t.datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</when>
+		<otherwise>
+<![CDATA[SELECT
+	        t.k_key AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     WHERE
+	        t.netid = #{netid}
+	       AND datetime >= #{startTime}
+		   AND datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</otherwise>
+	</choose>
+	</select>
+	
+	<select id="getDimensionSaegwlistByKey" resultType="TDimensionVO">
+    <choose>
+		<when test="str=='IMEITAC'">
+<![CDATA[SELECT
+            ifnull(
+              t1.PhoneName,
+              CONCAT(
+                 'UNKNOWN UE [IMEI TAC ',
+				 t.K_KEY,
+				 ']'              
+              )
+            ) AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     LEFT JOIN t_imeitac_translate t1 ON t.K_KEY = t1.IMEITAC
+	     WHERE
+	        t.netid = #{netid}
+	       AND t.datetime >= #{startTime}
+		   AND t.datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t1.PhoneName
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</when>
+		<when test="str=='SGW'||str=='PGW'">
+<![CDATA[SELECT
+            ifnull(
+              t1.name,
+			  t.K_KEY
+            ) AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     LEFT JOIN t_user_signal_host_config t1 ON t.K_KEY = t1.IP
+	     WHERE
+	        t.netid = #{netid}
+	       AND t.datetime >= #{startTime}
+		   AND t.datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</when>
+		<otherwise>
+<![CDATA[SELECT
+	        t.k_key AS obj,
+	        sum(t.k_${statisticType}) as failures
+	     FROM
+	        t_${eventType}_ebmlog_statistics_${date} t
+	     WHERE
+	        t.netid = #{netid}
+	       AND datetime >= #{startTime}
+		   AND datetime < #{endTime} 
+		   AND t.cc_plus_scc = #{parm}
+	       AND t.k_name = #{str}
+	     GROUP BY
+	        t.k_key
+	     ORDER BY
+	        failures DESC
+	     LIMIT #{num}]]> 		
+		</otherwise>
+	</choose>
+	</select>
+	
+	<select id="queryListByTac" resultType="TEbmlogStatistics" >
+<![CDATA[SELECT 
+            CONCAT(b.CAUSECODE,IFNULL(b.cc,''))  as CAUSECODE,
+            CONCAT(b.SUBCAUSECODE,IFNULL(b.scc,'')) as SUBCAUSECODE,
+            b.NETID,
+			t1.cc_description AS cc,
+			t2.scc_description AS scc,
+			t2.action,
+			t2.domain,
+			b.failures
+		 FROM
+			(
+				SELECT
+					t.CAUSECODE,
+					t.SUBCAUSECODE,
+					t.cc,
+					t.scc,
+					t.NETID,
+					sum(t.k_value) AS failures
+				FROM
+					t_${eventType}_ebmlog_statistics_${date} t
+				WHERE
+					netid = #{netid}
+					AND K_NAME = 'TAC'
+					AND DATETIME >= #{startTime}
+					AND DATETIME < #{endTime}
+				    AND K_key = #{tac}
+				GROUP BY
+					t.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+        ORDER BY failures DESC 
+	    <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="queryListByTacCount" resultType="Integer" >
+<![CDATA[SELECT 
+           count(*)
+		 FROM
+			(
+				SELECT
+					t.CAUSECODE,
+					t.SUBCAUSECODE,
+					t.cc,
+					t.scc,
+					t.NETID,
+					sum(t.k_value) AS failures
+				FROM
+					t_${eventType}_ebmlog_statistics_${date} t
+				WHERE
+					netid = #{netid}
+					AND K_NAME = 'TAC'
+					AND DATETIME >= #{startTime}
+					AND DATETIME < #{endTime}
+				    AND K_key = #{tac}
+				GROUP BY
+					t.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+	</select>
+	
+	<select id="queryListByEci" resultType="TEbmlogStatistics" >
+<![CDATA[SELECT 
+            CONCAT(b.CAUSECODE,IFNULL(b.cc,''))  as CAUSECODE,
+            CONCAT(b.SUBCAUSECODE,IFNULL(b.scc,'')) as SUBCAUSECODE,
+            b.NETID,
+			t1.cc_description AS cc,
+			t2.scc_description AS scc,
+			t2.action,
+			t2.domain,
+			b.failures
+		 FROM
+			(
+				SELECT
+					t.CAUSECODE,
+					t.SUBCAUSECODE,
+					t.cc,
+					t.scc,
+					t.NETID,
+					sum(t.k_value) AS failures
+				FROM
+					t_${eventType}_ebmlog_statistics_${date} t
+				WHERE
+					netid = #{netid}
+					AND K_NAME = 'ECI'
+					AND DATETIME >= #{startTime}
+					AND DATETIME < #{endTime}
+				    AND K_key = #{eci}
+				GROUP BY
+					t.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+        ORDER BY failures DESC 
+	    <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="queryListByEciCount" resultType="Integer" >
+<![CDATA[SELECT 
+           count(*)
+		 FROM
+			(
+				SELECT
+					t.CAUSECODE,
+					t.SUBCAUSECODE,
+					t.cc,
+					t.scc,
+					t.NETID,
+					sum(t.k_value) AS failures
+				FROM
+					t_${eventType}_ebmlog_statistics_${date} t
+				WHERE
+					netid = #{netid}
+					AND K_NAME = 'ECI'
+					AND DATETIME >= #{startTime}
+					AND DATETIME < #{endTime}
+				    AND K_key = #{eci}
+				GROUP BY
+					t.CC_PLUS_SCC
+			) b
+		LEFT JOIN t_ebmlog_xml_info t1 ON b.NETID = t1.netid
+		AND t1.cc = b.CAUSECODE
+		AND t1.netid = #{netid}
+		LEFT JOIN t_ebmlog_xml_info t2 ON b.NETID = t2.netid
+		AND t2.scc = b.SUBCAUSECODE
+		AND t2.netid = #{netid}]]>
+	</select>
+	
+	<select id="querySuccessList" resultType="TEbmlogStatistics">
+	<![CDATA[SELECT 
+	            CONCAT(t.CAUSECODE,IFNULL(t.cc, '')) AS CAUSECODE,
+				CONCAT(t.SUBCAUSECODE,IFNULL(t.scc, '')) AS SUBCAUSECODE,
+	            t1.cc_description AS cc,
+				t2.scc_description AS scc,
+				t1.action,
+				t1.domain,
+	            t.failures
+	        FROM 
+	        (SELECT 
+	            b.CAUSECODE,
+				b.SUBCAUSECODE,
+			    b.cc,
+			    b.scc,
+	            b.NETID,
+				sum(b.k_value) as failures
+		     FROM
+				t_${eventType}_ebmlog_statistics_${date} b
+		     WHERE
+				b.netid = #{netid}
+				AND b.K_NAME = 'success'
+				AND b.DATETIME >= #{startTime}
+				AND b.DATETIME < #{endTime}
+			GROUP BY
+				b.CC_PLUS_SCC	
+			  ORDER BY failures DESC ) t
+			  LEFT JOIN t_ebmlog_xml_info t1 ON t.NETID = t1.netid
+				AND t1.cc = t.CAUSECODE
+				AND t1.netid = #{netid}
+				LEFT JOIN t_ebmlog_xml_info t2 ON t.NETID = t2.netid
+				AND t2.scc = t.SUBCAUSECODE
+				AND t2.netid = #{netid}
+		]]>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

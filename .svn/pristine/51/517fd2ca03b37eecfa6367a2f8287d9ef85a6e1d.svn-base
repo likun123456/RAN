@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TVisExcelModuleDetailDao">
+    
+	<sql id="tVisExcelModuleDetailColumns">
+		a.id AS "id",
+		a.excelId AS "excelId",
+		a.moduleId AS "moduleId",
+		a.executeNo AS "executeNo",
+		a.paramType AS "paramType",
+		a.commandName AS "commandName",
+		a.formRemark AS "formRemark",
+		a.debugRemark AS "debugRemark",
+		a.confCmd AS "confCmd",
+		a.beforePrompt AS "beforePrompt",
+		a.afterPrompt AS "afterPrompt",
+		a.checkRegexp AS "checkRegexp",
+		a.timeout AS "timeout",
+		a.errorHandleMode AS "errorHandleMode",
+		a.varArrayRegexp AS "varArrayRegexp",
+		a.varArray AS "varArray",
+		a.remark AS "remark"
+	</sql>
+    
+	<select id="get" resultType="TVisExcelModuleDetail">
+		SELECT 
+			<include refid="tVisExcelModuleDetailColumns"/>
+		FROM t_vis_excel_module_detail a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVisExcelModuleDetail">
+		SELECT 
+			<include refid="tVisExcelModuleDetailColumns"/>
+		FROM t_vis_excel_module_detail a
+		where 1=1 
+		<if test="commandName != null and commandName != ''">
+			and a.commandName = #{commandName}
+		</if>
+		<if test="executeNo != null and executeNo != ''">
+			and a.executeNo = #{executeNo}
+		</if>
+		<if test="excelId != null and excelId != ''">
+			and a.excelId = #{excelId}
+		</if>
+		<if test="moduleId != null and moduleId != ''">
+			and a.moduleId = #{moduleId}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findParamList" resultType="TVisExcelModuleDetail">
+		SELECT 
+			<include refid="tVisExcelModuleDetailColumns"/>
+		FROM t_vis_excel_module_detail a
+		where 1=1 
+			and a.executeNo = #{executeNo}
+			and a.excelId = #{excelId}
+			and a.moduleId = #{moduleId}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findAllList" resultType="TVisExcelModuleDetail">
+		SELECT 
+			<include refid="tVisExcelModuleDetailColumns"/>
+		FROM t_vis_excel_module_detail a	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_excel_module_detail(
+		    excelId,
+		    moduleId,
+		    executeNo,
+		    paramType,
+		    commandName,
+		    formRemark,
+		    debugRemark,
+		    confCmd,
+		    beforePrompt,
+		    afterPrompt,
+		    checkRegexp,
+		    timeout,
+		    errorHandleMode,
+		    varArrayRegexp,
+		    varArray,
+		    remark
+		) VALUES (
+			#{excelId},
+			#{moduleId},
+			#{executeNo},
+			#{paramType},
+			#{commandName},
+			#{formRemark},
+			#{debugRemark},
+			#{confCmd},
+			#{beforePrompt},
+			#{afterPrompt},
+			#{checkRegexp},
+			#{timeout},
+			#{errorHandleMode},
+			#{varArrayRegexp},
+			#{varArray},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_excel_module_detail SET
+		    excelId=#{excelId},
+		    moduleId=#{moduleId},
+		    executeNo=#{executeNo},
+		    paramType=#{paramType},
+			commandName=#{commandName},
+			formRemark=#{formRemark},
+			debugRemark=#{debugRemark},
+			confCmd=#{confCmd},
+			beforePrompt=#{beforePrompt},
+			afterPrompt=#{afterPrompt},
+			checkRegexp=#{checkRegexp},
+			timeout=#{timeout},
+			errorHandleMode=#{errorHandleMode},
+			varArrayRegexp=#{varArrayRegexp},
+			varArray=#{varArray},
+			remark=#{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_excel_module_detail
+		where 1=1 
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="commandName != null and commandName != ''">
+			and commandName = #{commandName}
+		</if>
+		<if test="excelId != null and excelId != ''">
+			and excelId = #{excelId}
+		</if>
+		<if test="moduleId != null and moduleId != ''">
+			and moduleId = #{moduleId}
+		</if>
+	</update>	
+	
+	<update id="updateSort">
+		UPDATE t_vis_excel_module_detail SET 	
+			executeNo = #{sort}
+		WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TEpaDao">
+    
+	<sql id="tEpaColumns">
+		a.f_id AS "id",
+		a.f_name AS "fname",
+		a.f_address AS "faddress",
+		a.f_username AS "fusername",
+		a.f_password AS "fpassword"
+	</sql>
+	
+	<sql id="tEpaJoins">
+	</sql>
+    
+	<select id="get" resultType="TEpa">
+		SELECT 
+			<include refid="tEpaColumns"/>
+		FROM t_epa a
+		<include refid="tEpaJoins"/>
+		WHERE a.f_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TEpa">
+		SELECT 
+			<include refid="tEpaColumns"/>
+		FROM t_epa a
+		<include refid="tEpaJoins"/>
+		<where>
+			<if test="fname != null and fname != ''">
+				AND a.f_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fname},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TEpa">
+		SELECT 
+			<include refid="tEpaColumns"/>
+		FROM t_epa a
+		<include refid="tEpaJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_epa(
+			f_name,
+			f_address,
+			f_username,
+			f_password
+		) VALUES (
+			#{fname},
+			#{faddress},
+			#{fusername},
+			#{fpassword}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_epa SET 	
+			f_id = #{id},
+			f_name = #{fname},
+			f_address = #{faddress},
+			f_username = #{fusername},
+			f_password = #{fpassword}
+		WHERE f_id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_epa
+		WHERE f_id = #{id}
+	</update>
+	
+</mapper>

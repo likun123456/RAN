@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TVisExcelExcuteLogDao">
+    
+	<sql id="tVisExcelExcuteLogColumns">
+		a.id AS "id",
+		a.datetime AS "datetime",
+		a.netid AS "netid",
+		a.excelid AS "excelid",
+		a.excelname AS "excelname",
+		a.log AS "log"
+	</sql>
+	
+	<sql id="tVisExcelExcuteLogJoins">
+	</sql>
+    
+	<select id="get" resultType="TVisExcelExcuteLog">
+		SELECT 
+			<include refid="tVisExcelExcuteLogColumns"/>
+		FROM t_vis_excel_excute_log a
+		<include refid="tVisExcelExcuteLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findListByIds" resultType="TVisExcelExcuteLog">
+	    SELECT
+			a.id AS "id",
+			a.datetime AS "datetime",
+			a.netid AS "netid",
+			a.excelid AS "excelid",
+			a.excelname AS "excelname",
+			a.log AS "log",
+			n.f_name as "netname"
+		FROM t_vis_excel_excute_log a,t_newnetelement n
+		WHERE a.netid  = n.f_id and a.id in (${ids})
+	</select>
+	
+	<select id="findList" resultType="TVisExcelExcuteLog">
+	   	SELECT
+			a.id AS "id",
+			a.datetime AS "datetime",
+			a.netid AS "netid",
+			a.excelid AS "excelid",
+			a.excelname AS "excelname",
+			a.log AS "log",
+			n.f_name as "netname"
+		FROM t_vis_excel_excute_log a,t_newnetelement n
+		where
+			a.netid  = n.f_id
+			<if test="netid!=null and netid != ''">
+			    AND a.netid = #{netid}
+			</if>
+			<if test="excelname != null and excelname != ''">
+				AND a.excelname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{excelname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{excelname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{excelname},'%')</if>
+			</if>
+			<if test="starttime!=null">
+			    AND a.datetime >= #{starttime}
+			</if>
+			<if test="endtime!=null">
+			    AND a.datetime >= #{endtime}
+			</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				order by a.datetime desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVisExcelExcuteLog">
+		SELECT 
+			<include refid="tVisExcelExcuteLogColumns"/>
+		FROM t_vis_excel_excute_log a
+		<include refid="tVisExcelExcuteLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_excel_excute_log(
+			datetime,
+			netid,
+			excelid,
+			excelname,
+			log
+		) VALUES (
+			#{datetime},
+			#{netid},
+			#{excelid},
+			#{excelname},
+			#{log}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_excel_excute_log SET 	
+			datetime = #{datetime},
+			netid = #{netid},
+			excelid = #{excelid},
+			excelname = #{excelname},
+			log = #{log}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_excel_excute_log
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

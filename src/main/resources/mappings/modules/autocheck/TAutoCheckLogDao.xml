@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.autocheck.dao.TAutoCheckLogDao">
+    
+	<sql id="tAutoCheckLogColumns">
+		a.id AS "id",
+		a.net_id AS "netId",
+		a.check_item AS "checkItem",
+		a.check_result AS "checkResult",
+		a.check_time AS "checkTime",
+		a.check_log AS "checkLog"
+	</sql>
+	
+	<sql id="tAutoCheckLogJoins">
+		left join t_newnetelement n on a.net_id = n.f_id
+	</sql>
+    
+	<select id="get" resultType="TAutoCheckLog">
+		SELECT 
+			<include refid="tAutoCheckLogColumns"/>
+			,n.f_name as netName
+		FROM t_auto_check_log a
+		<include refid="tAutoCheckLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAutoCheckLog">
+		SELECT 
+			<include refid="tAutoCheckLogColumns"/>
+		FROM t_auto_check_log a
+		<include refid="tAutoCheckLogJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAutoCheckLog">
+		SELECT 
+			<include refid="tAutoCheckLogColumns"/>
+		FROM t_auto_check_log a
+		<include refid="tAutoCheckLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_auto_check_log(
+			net_id,
+			check_item,
+			check_result,
+			check_time,
+			check_log
+		) VALUES (
+			#{netId},
+			#{checkItem},
+			#{checkResult},
+			#{checkTime},
+			#{checkLog}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_auto_check_log SET 	
+			net_id = #{netId},
+			check_item = #{checkItem},
+			check_result = #{checkResult},
+			check_time = #{checkTime},
+			check_log = #{checkLog}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_auto_check_log
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryList" resultType="TAutoCheckLog" >
+	    SELECT 
+			t.id,n.type as netType,n.f_name as netName,c.item_name as itemName,t.check_result as checkResult,
+			t.check_time as checkTime,t.check_log as checkLog
+	         FROM t_auto_check_log t,t_newnetelement n,t_auto_template_check_config c
+	         WHERE t.net_id = n.f_id and t.check_item = c.id 
+	         <if test="netType !=null and netType != ''">
+			 and n.type = #{netType}
+	         </if>
+	         <if test="netId !=null and netId != ''">
+			 and n.f_id in (${netId})
+			 </if>
+			 <if test="checkItem !=null and checkItem != ''">
+				and t.check_item in (${checkItem})
+			 </if>
+			 <if test="checkResult !=null and checkResult != ''">
+				and t.check_result = #{checkResult}
+			 </if>
+	        <![CDATA[ and t.check_time >= #{beginDate}  and t.check_time <= #{endDate} ]]>
+         <choose>
+             <when test="sortName!=null">
+                   ORDER BY ${sortName} ${sortOrder}
+             </when>
+             <otherwise>
+                   ORDER BY t.check_time desc
+             </otherwise>
+         </choose>
+         <if test="limit!=0">
+        	 LIMIT #{offset},#{limit}
+		 </if>
+	</select>
+	
+	<select id="queryListCount" resultType="Integer" >
+		SELECT count(*) from t_auto_check_log t,t_newnetelement n,t_auto_template_check_config c
+         WHERE t.net_id = n.f_id and t.check_item = c.id
+         <if test="netType !=null and netType != ''">
+			 and n.type = #{netType}
+	     </if>
+         <if test="netId !=null and netId != ''">
+			and n.f_id in (${netId})
+		 </if>
+		 <if test="checkItem !=null and checkItem != ''">
+			and t.check_item in (${checkItem})
+		 </if>
+		 <if test="checkResult !=null and checkResult != ''">
+				and t.check_result = #{checkResult}
+		 </if>
+        <![CDATA[ and t.check_time >= #{beginDate}  and t.check_time <= #{endDate} ]]>
+	</select>
+	
+	<select id="queryMaxCheckTime" resultType="String" >
+		select max(check_time) as checkTime from t_auto_check_log
+	</select>
+	
+	<select id="queryCheckItems" resultType="TAutoCheckLog" >
+		select GROUP_CONCAT(id) as id,item_name as itemName from t_auto_template_check_config t where t.net_type=#{netType} group by t.item_name
+	</select>
+	
+</mapper>

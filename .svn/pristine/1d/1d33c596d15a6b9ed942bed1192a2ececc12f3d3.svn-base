@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TEpcDicDao">
+    
+	<sql id="tEpcDicColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.value AS "value",
+		a.remark AS "remark"
+	</sql>
+	    
+	<select id="get" resultType="TEpcDic">
+		SELECT 
+			<include refid="tEpcDicColumns"/>
+		FROM t_epc_dic a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TEpcDic">
+		SELECT 
+			<include refid="tEpcDicColumns"/>
+		FROM t_epc_dic a
+		<where>
+			<if test="type != null and type != ''">
+				AND a.type LIKE 
+					<if test="dbName == 'oracle'">'%'||#{type}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{type}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{type},'%')</if>
+			</if>
+			<if test="value != null and value != ''">
+				AND a.value=#{value}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TEpcDic">
+		SELECT 
+			<include refid="tEpcDicColumns"/>
+		FROM t_epc_dic a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_epc_dic(
+			type,
+			value,
+			remark
+		) VALUES (
+			#{type},
+			#{value},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_epc_dic SET 	
+			id = #{id},
+			type = #{type},
+			value = #{value},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_epc_dic
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

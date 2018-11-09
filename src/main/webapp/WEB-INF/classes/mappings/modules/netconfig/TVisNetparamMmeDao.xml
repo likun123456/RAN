@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TVisNetparamMmeDao">
+    
+	<sql id="tVisNetparamMmeColumns">
+		a.netid AS "netid",
+		a.hw AS "hw",
+		a.swl AS "swl",
+		a.mmec AS "mmec",
+		a.nri AS "nri",
+		a.oam_ip_address AS "oamIpAddress",
+		a.update_time AS "updateTime"
+	</sql>
+	
+	<sql id="tVisNetparamMmeJoins">
+	</sql>
+    
+	<select id="get" resultType="TVisNetparamMme">
+		SELECT 
+			<include refid="tVisNetparamMmeColumns"/>
+		FROM t_vis_netparam_mme a
+		<include refid="tVisNetparamMmeJoins"/>
+		WHERE a.netid = #{netid}
+	</select>
+	
+	<select id="findList" resultType="TVisNetparamMme">
+		SELECT 
+			<include refid="tVisNetparamMmeColumns"/>
+		FROM t_vis_netparam_mme a
+		<include refid="tVisNetparamMmeJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVisNetparamMme">
+		SELECT 
+			<include refid="tVisNetparamMmeColumns"/>
+		FROM t_vis_netparam_mme a
+		<include refid="tVisNetparamMmeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_netparam_mme(
+			netid,
+			hw,
+			swl,
+			mmec,
+			nri,
+			oam_ip_address,
+			update_time
+		) VALUES (
+			#{netid},
+			#{hw},
+			#{swl},
+			#{mmec},
+			#{nri},
+			#{oamIpAddress},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_netparam_mme SET 	
+			hw = #{hw},
+			swl = #{swl},
+			mmec = #{mmec},
+			nri = #{nri},
+			oam_ip_address = #{oamIpAddress},
+			update_time = #{updateTime}
+		WHERE netid = #{netid}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_netparam_mme
+		WHERE netid = #{netid}
+	</update>
+	
+</mapper>

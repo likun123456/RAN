@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TDiameterConfigDao">
+    
+	<sql id="tDiameterConfigColumns">
+		a.id AS "id",
+		a.diameter_port AS "diameterPort",
+		a.diameter_type AS "diameterType"
+	</sql>
+	
+	<sql id="tDiameterConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="TDiameterConfig">
+		SELECT 
+			<include refid="tDiameterConfigColumns"/>
+		FROM t_diameter_config a
+		<include refid="tDiameterConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TDiameterConfig">
+		SELECT 
+			<include refid="tDiameterConfigColumns"/>
+		FROM t_diameter_config a
+		<include refid="tDiameterConfigJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TDiameterConfig">
+		SELECT 
+			<include refid="tDiameterConfigColumns"/>
+		FROM t_diameter_config a
+		<include refid="tDiameterConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_diameter_config(
+			id,
+			diameter_port,
+			diameter_type
+		) VALUES (
+			#{id},
+			#{diameterPort},
+			#{diameterType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_diameter_config SET 	
+			diameter_port = #{diameterPort},
+			diameter_type = #{diameterType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_diameter_config
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

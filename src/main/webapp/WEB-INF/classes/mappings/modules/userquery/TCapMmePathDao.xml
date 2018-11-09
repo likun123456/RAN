@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.userquery.dao.TCapMmePathDao">
+    
+	<sql id="tCapMmePathColumns">
+		a.id AS "id",
+		a.pid AS "pid",
+		a.poolids AS "poolids",
+		a.poolnames AS "poolNames",
+		a.msisdn AS "msisdn",
+		a.pcappath AS "pcapPath",
+		a.pcapname AS "pcapName",
+		a.starttime AS "startTime",
+		a.endtime AS "endTime"
+	</sql>
+	
+	<sql id="tCapMmePathJoins">
+	</sql>
+    
+	<select id="get" resultType="TCapMmePath">
+		SELECT 
+			<include refid="tCapMmePathColumns"/>
+		FROM t_cap_mme_path a
+		<include refid="tCapMmePathJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCapMmePath">
+		SELECT 
+			<include refid="tCapMmePathColumns"/>
+		FROM t_cap_mme_path a
+		<include refid="tCapMmePathJoins"/>
+		<where>
+			 1=1
+			<if test="pid!=null">
+			    AND a.pid = #{pid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCapMmePath">
+		SELECT 
+			<include refid="tCapMmePathColumns"/>
+		FROM t_cap_mme_path a
+		<include refid="tCapMmePathJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TCapMmePath">
+		INSERT INTO t_cap_mme_path(
+			pid,
+			poolids,
+			poolnames,
+			msisdn,
+			pcappath,
+			pcapname,
+			starttime,
+			endtime
+		) VALUES (
+			#{pid},
+			#{poolids},
+			#{poolNames},
+			#{msisdn},
+			#{pcapPath},
+			#{pcapName},
+			#{startTime},
+			#{endTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cap_mme_path SET 	
+			pid = #{pid},
+			poolids = #{poolids},
+			poolnames = #{poolNames},
+			msisdn = #{msisdn},
+			pcappath = #{pcapPath},
+			pcapname = #{pcapName},
+			starttime = #{startTime},
+			endtime = #{endTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_cap_mme_path
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

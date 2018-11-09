@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.collectset.dao.TCollectordeployDao">
+    
+	<sql id="tCollectordeployColumns">
+		a.id AS "id",
+		a.collectorname AS "collectorname",
+		a.ip AS "ip",
+		a.username AS "username",
+		a.password AS "password",
+		a.core_data_ebmlog AS "coredataebmlog",
+		a.core_data_sub AS "coredatasub",
+		a.core_ebmlog AS "coreebmlog"
+	</sql>
+	
+	<sql id="tCollectordeployJoins">
+	</sql>
+    
+	<select id="get" resultType="TCollectordeploy">
+		SELECT 
+			<include refid="tCollectordeployColumns"/>
+		FROM t_collectordeploy a
+		<include refid="tCollectordeployJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCollectordeploy">
+		SELECT 
+			<include refid="tCollectordeployColumns"/>
+		FROM t_collectordeploy a
+		<include refid="tCollectordeployJoins"/>
+		<if test="collectorname != null and collectorname != ''">
+			where a.collectorname like 
+				<if test="dbName == 'oracle'">'%'||#{collectorname}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{collectorname}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{collectorname}, '%')</if>
+		</if>
+		<if test="coreebmlog != null and coreebmlog != ''">
+			where a.core_ebmlog=#{coreebmlog}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCollectordeploy">
+		SELECT 
+			<include refid="tCollectordeployColumns"/>
+		FROM t_collectordeploy a
+		<include refid="tCollectordeployJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_collectordeploy(
+			collectorname,
+			ip,
+			username,
+			password,
+			core_data_ebmlog,
+			core_data_sub,
+			core_ebmlog
+		) VALUES (
+			#{collectorname},
+			#{ip},
+			#{username},
+			#{password},
+			#{coredataebmlog},
+			#{coredatasub},
+			#{coreebmlog}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_collectordeploy SET 	
+			collectorname = #{collectorname},
+			ip = #{ip},
+			username = #{username},
+			password = #{password},
+			core_data_ebmlog = #{coredataebmlog},
+			core_data_sub = #{coredatasub},
+			core_ebmlog= #{coreebmlog}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_collectordeploy
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getEbmLogCollectorIp" resultType="string">
+		SELECT 
+			c.ip
+		FROM t_collectordeploy c,t_elementcollect e
+		WHERE c.id = e.f_collector
+		AND e.f_netelement = #{netid}
+        AND e.f_type = 4
+	</select>
+	
+	<select id="getCheatCollectorIp" resultType="string">
+		SELECT 
+			c.ip
+		FROM t_collectordeploy c,t_elementcollect e
+		WHERE c.id = e.f_collector
+		AND e.f_netelement = #{netid}
+        AND e.f_type = 6
+	</select>
+	
+</mapper>

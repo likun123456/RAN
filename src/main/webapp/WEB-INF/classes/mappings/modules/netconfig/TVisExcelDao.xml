@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TVisExcelDao">
+    
+	<sql id="tVisExcelColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type AS "type",
+		a.templatetype AS "templatetype",
+		a.sort AS "sort"
+	</sql>
+    
+	<select id="get" resultType="TVisExcel">
+		SELECT 
+			<include refid="tVisExcelColumns"/>
+		FROM t_vis_excel a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVisExcel">
+		SELECT 
+			<include refid="tVisExcelColumns"/>
+		FROM t_vis_excel a
+		where 1=1
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="templatetype != null and templatetype != ''">
+			and a.templatetype = #{templatetype}
+		</if>
+		<if test="name != null and name != ''">
+			and a.name = #{name}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVisExcel">
+		SELECT 
+			<include refid="tVisExcelColumns"/>
+		FROM t_vis_excel a	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+	    <selectKey resultType="java.lang.String" order="AFTER" keyProperty="id">
+          SELECT LAST_INSERT_ID()
+        </selectKey>
+		INSERT INTO t_vis_excel(
+			name,type,templatetype
+		) VALUES (
+			#{name},#{type},#{templatetype}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_excel SET 	
+			name = #{name},
+			type = #{type},
+			templatetype=#{templatetype}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_excel
+		WHERE 1 = 1
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and id = #{name}
+		</if>
+	</update>	
+	<update id="updateSort">
+		UPDATE t_vis_excel SET 	
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getByName" resultType="int">
+		SELECT COUNT(*)
+		FROM t_vis_excel
+		WHERE name = #{name}
+	</select>
+</mapper>

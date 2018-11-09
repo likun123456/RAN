@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.TPoolDao">
+    
+	<sql id="tPoolColumns">
+		a.f_id AS "id",
+		a.f_poolname AS "fPoolname",
+		a.f_type AS "fType"
+	</sql>
+	
+	<sql id="tPoolJoins">
+	</sql>
+    
+	<select id="get" resultType="TPool">
+		SELECT 
+			<include refid="tPoolColumns"/>
+		FROM t_pool a
+		<include refid="tPoolJoins"/>
+		WHERE a.f_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TPool">
+		SELECT 
+			<include refid="tPoolColumns"/>
+		FROM t_pool a
+		where 1=1
+		and a.f_type !='OTHER_NE'
+		<include refid="tPoolJoins"/>
+		<if test="fpoolname != null and fpoolname != ''">
+			and a.f_poolname like 
+				<if test="dbName == 'oracle'">'%'||#{fpoolname}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{fpoolname}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{fpoolname}, '%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TPool">
+		SELECT 
+			<include refid="tPoolColumns"/>
+		FROM t_pool a
+		<include refid="tPoolJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			    ORDER BY a.f_id
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_pool(
+			f_poolname,
+			f_type
+		) VALUES (
+			#{fpoolname},
+			#{ftype}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_pool SET 	
+			f_id = #{id},
+			f_poolname = #{fpoolname},
+			f_type = #{ftype}
+		WHERE f_id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_pool
+		WHERE f_id = #{id}
+	</update>
+	
+	<select id="getByName" resultType="int">
+		SELECT COUNT(*)
+		FROM t_pool a
+		WHERE a.f_poolname = #{fpoolname}
+	</select>
+	
+	<select id="queryPoolListByType" resultType="TPool">
+		SELECT 
+            <include refid="tPoolColumns"/>
+		FROM t_pool a 
+		
+		<choose>
+	        <when test="_parameter  != null and _parameter  != ''">
+	            WHERE a.f_type = #{ftype}
+	        </when>
+    	</choose>
+		
+	</select>
+	
+	<select id="findPoolNameById" resultType="String">
+		SELECT 
+            F_POOLNAME
+		FROM t_pool a 
+		WHERE a.F_ID = #{poolid}
+	</select>
+	
+	
+	<select id="queryNetidsByPoolName" resultType="String">
+	    select b.f_id 
+	    from t_pool a,t_newnetelement b 
+	    where a.F_ID = b.f_nid and a.F_POOLNAME = #{poolName}
+	</select>
+	
+	<select id="queryNetNamesByPoolName" resultType="String">
+	    select b.f_name
+	    from t_pool a,t_newnetelement b 
+	    where a.F_ID = b.f_nid and a.F_POOLNAME = #{poolName}
+	</select>
+	
+	<select id="queryNetTypeByNetName" resultType="String">
+	    select a.F_TYPE
+		from t_pool a,t_newnetelement b
+		where a.F_ID = b.f_nid and b.f_name = #{netName}
+	</select>
+	
+	<select id="queryNetidByNetName" resultType="String">
+	    select t.f_id from t_newnetelement t where t.f_name = #{netName}
+	</select>
+</mapper>

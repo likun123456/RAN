@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.netconfig.dao.VisNodesDao">
+    
+	<sql id="visNodesColumns">
+		a.id AS "id",
+		a.roomid AS "roomid",
+		a.oid AS "oid",
+		a.type AS "type",
+		a.x AS "x",
+		a.y AS "y"
+	</sql>
+	
+	<sql id="visNodesJoins">
+	</sql>
+    
+	<select id="get" resultType="VisNodes">
+		SELECT 
+			<include refid="visNodesColumns"/>
+		FROM t_vis_nodes a
+		<include refid="visNodesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="VisNodes">
+		SELECT 
+			<include refid="visNodesColumns"/>
+		FROM t_vis_nodes a
+		<include refid="visNodesJoins"/>
+		<where>
+			<if test="type != null and type != ''">
+				AND a.type =#{type}
+			</if>
+			<if test="roomid != null and roomid != ''">
+				AND a.roomid =#{roomid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findnodeidByNidAndType" resultType="String">
+	   SELECT
+	       t.id
+	   FROM t_vis_nodes t
+	   WHERE t.oid = #{netid} AND t.type = #{netType}
+	</select>
+	
+	<select id="findAllList" resultType="VisNodes">
+		SELECT 
+			<include refid="visNodesColumns"/>
+		FROM t_vis_nodes a
+		<include refid="visNodesJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_vis_nodes(
+			roomid,
+			oid,
+			type,
+			x,
+			y
+		) VALUES (
+			#{roomid},
+			#{oid},
+			#{type},
+			#{x},
+			#{y}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_vis_nodes SET
+			roomid = #{roomid},
+			oid = #{oid},
+			type = #{type},
+			x = #{x},
+			y = #{y}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="savePosition">
+		UPDATE t_vis_nodes SET 
+			x = #{x},
+			y = #{y}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_vis_nodes
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

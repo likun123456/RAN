@@ -1,0 +1,21 @@
+.panel-heading ul {
+ 	list-style:none;height:20px;
+}
+
+.panel-heading ul li {
+	float:left;
+	line-height:30px;
+}
+
+.panel-heading ul li span{
+	font-size: 30px; 
+	float:left; 
+	margin-top: 0px;
+	margin-left:10px;
+}
+
+.panel-heading ul li p{
+	font-size: 14px; 
+	float:left; 
+	margin-left: 15px;
+}
