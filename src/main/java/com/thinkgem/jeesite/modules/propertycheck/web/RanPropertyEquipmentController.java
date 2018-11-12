@@ -89,28 +89,8 @@ public class RanPropertyEquipmentController extends BaseController {
 	@RequestMapping(value = "insertBatch")
 	public String insertBatch(RedirectAttributes redirectAttributes) {
 		System.out.println();
-		List<RanPropertyEquipment> list=new ArrayList<>();
-		for (int i = 0; i < 9; i++) {
-			RanPropertyEquipment r=new RanPropertyEquipment();
-			r.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-			r.setSerialnumber(""+i);
-			r.setSitename("FJB");
-			r.setProductname("");
-			r.setProductnumber("123");
-			r.setProductionrevision("2");
-			r.setProductiondate("2015");
-			r.setManagerobject("mo");
-			r.setManufacturerid("mid");
-			r.setManufacturerrevision("mr");
-			r.setNegotiatedbitrate("neg");
-			r.setStatus("0");
-			r.setLogdate(new Date());
-			r.setMocategory("1");
-			list.add(r);
-		}
-		
 		ranPropertyEquipmentService.batchInsert();
-		addMessage(redirectAttributes, "删除对象类型成功");
+		addMessage(redirectAttributes, "添加对象类型成功");
 		return "redirect:"+Global.getAdminPath()+"/propertycheck/ranPropertyEquipment/?repage";
 	}
 

@@ -1,16 +1,24 @@
 package com.thinkgem.jeesite.modules.propertycheck.util;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.stereotype.Component;
+
+import com.thinkgem.jeesite.common.constant.FieldConstant;
+import com.thinkgem.jeesite.modules.propertycheck.entity.RanPropertyEquipment;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 public class ReadAndAnalysisLog {
-	private static int  serialNumber;
-    private static int siteName;
+//	private RanPropertyEquipment ranPropertyEquipment;
+    private static int  serialNumber;
+    private static String siteName;
     private static int managerObject;
     private static int productName;
     private static int productNumber;
@@ -19,16 +27,9 @@ public class ReadAndAnalysisLog {
     private static int manufactureId;
     private static int manufactureRevision;
     private static int negotiaedBitRate;
-    private static int status;
-    private static int logDate;
-    private static ArrayList<File> filePathArr=new ArrayList<File>();
-    /**
-     * 递归读取文件夹下所有的文件，存入到List集合的是所有的log文件
-     * @author BruceLee
-     * @param filePath
-     * @return
-     * @throws Exception
-     */
+    private static String status;
+    private static String logDate;
+    static ArrayList<File> filePathArr=new ArrayList<File>();
     public static ArrayList<File> readDir(File filePath) throws  Exception{
         File[] files=filePath.listFiles();
         for (File f:files) {
@@ -36,21 +37,23 @@ public class ReadAndAnalysisLog {
                 readDir(f);
             }
             if (f.isFile()){
-//                System.out.println(f);
                 filePathArr.add(f);
+
             }
         }
             return filePathArr;
 
     }
+
+
     /**
      * 读取一个站站点的数据
-     * @author BruceLee
      * @param fileName
      * @throws Exception
      */
-    public static void readUseLine(String fileName) throws  Exception{
-        TreeMap<Integer,String> map=new TreeMap<Integer, String>(new Comparator<Integer>() {
+    public static List<RanPropertyEquipment> readUseLine(String fileName) throws  Exception{
+        List<RanPropertyEquipment> ranPropertyEquipmentsList=new ArrayList<>();
+    	TreeMap<Integer,String> map=new TreeMap<Integer, String>(new Comparator<Integer>() {
             public int compare(Integer o1, Integer o2) {
                 return o1.compareTo(o2);
             }
@@ -61,7 +64,6 @@ public class ReadAndAnalysisLog {
             }
         });//存取每行文本的集合，键为行数，值为每行内容
         Map<Integer,Integer> map1=new HashMap<Integer,Integer>();//存储爱立信的表的始末行数
-//        Map<Integer,String> map2=new HashMap<Integer, String>();//存取所有的表
         Map<Integer,Integer> map3=new HashMap<Integer, Integer>();//存取第三方的表的始末行数
         InputStream inputStream;
         LineNumberReader lineNumberReader;
@@ -71,23 +73,13 @@ public class ReadAndAnalysisLog {
         int startline=0;//起始行
         int lastline=0;//结束行
 
-//        Workbook workbook=new HSSFWorkbook();//创建excel文件
-//        Sheet sheet=workbook.createSheet("资产信息核查表");//一张excel表
-//        sheet.setColumnWidth(0,256*60);
-//        sheet.setColumnWidth(1,256*25);
-//        sheet.setColumnWidth(2,256*17);
-//        sheet.setColumnWidth(3,256*20);
-//        sheet.setColumnWidth(4,256*18);
-//        sheet.setColumnWidth(5,256*20);
-//        sheet.setColumnWidth(6,256*15);
-//        sheet.setColumnWidth(7,256*15);
-//        sheet.setColumnWidth(8,256*15);
-//        Row row=sheet.createRow(0);//参数表示创建第几行，索引从0开始
-//        Cell cell;
-
         while((line=lineNumberReader.readLine())!=null){
             map.put(lineNumberReader.getLineNumber(),line);//存储所有行到map集合
         }
+        String[] strs=map.get(1).split("/");
+        siteName=strs[strs.length-1].split("\\.")[0];
+        logDate=(strs[strs.length-4]);
+
         for (Map.Entry<Integer,String> entry:map.entrySet()) {//遍历文本
             if(entry.getValue().contains("serialNumber")) {//
                 startline = entry.getKey();//做一个开始行的标记
@@ -114,20 +106,7 @@ public class ReadAndAnalysisLog {
             }
         }
 
-//       row.createCell(0).setCellValue("MO");
-//       row.createCell(1).setCellValue("manufacturerDesignation");
-//       row.createCell(2).setCellValue("manufacturerId");
-//       row.createCell(3).setCellValue("manufacturerRevision");
-//       row.createCell(4).setCellValue("negotiatedBitRate");
-//       row.createCell(5).setCellValue("productNumber");
-//       row.createCell(6).setCellValue("productRevision");
-//       row.createCell(7).setCellValue("productionDate");
-//       row.createCell(8).setCellValue("serialNumber");
-
-
 //          根据表头的规则截取数据列，爱立信自己的
-        int rownum=1;
-        int cellnum=0;
         for (Map.Entry<Integer,Integer> e0:map1.entrySet()){//遍历始末行行标
             for (Map.Entry<Integer,String> e1:map2.entrySet()) {
                 if(e1.getKey()>=e0.getKey()&&e1.getKey()<=e0.getValue()){//遍历始>末行的内容
@@ -140,24 +119,22 @@ public class ReadAndAnalysisLog {
                         productionDate=e1.getValue().indexOf("serialNumber");
                         serialNumber=e1.getValue().length();
                     }
-//                    row=sheet.createRow(rownum);
                     if(!e1.getValue().contains("Total")&&!e1.getValue().contains("==")&&!e1.getValue().contains("MO")){
-//                        System.out.print(e1.getValue().substring(0,managerObject));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(managerObject,productName));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productName,productNumber));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productNumber,productResivion));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productResivion,productionDate));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productionDate,serialNumber));
-//                        System.out.println("");
-
 //                        除去空数据
                     if(!e1.getValue().substring(productionDate,serialNumber).trim().equals("")&&e1.getValue().substring(productionDate,serialNumber).trim()!=null){
-
+                    	RanPropertyEquipment ranPropertyEquipment=new RanPropertyEquipment();
+                    	ranPropertyEquipment.preInsert();
+                    	ranPropertyEquipment.setManagerobject(e1.getValue().substring(0,managerObject));
+                    	ranPropertyEquipment.setProductname(e1.getValue().substring(managerObject,productName));
+                    	ranPropertyEquipment.setProductnumber(e1.getValue().substring(productName,productNumber));
+                    	ranPropertyEquipment.setProductionrevision(e1.getValue().substring(productNumber,productResivion));
+                    	ranPropertyEquipment.setProductiondate(e1.getValue().substring(productResivion,productionDate));
+                    	ranPropertyEquipment.setSerialnumber(e1.getValue().substring(productionDate,serialNumber));
+                    	ranPropertyEquipment.setLogdate(new SimpleDateFormat("yyyy-MM-dd").parse(logDate));
+                    	ranPropertyEquipment.setStatus("1");
+                    	ranPropertyEquipment.setSitename(siteName);
+                    	separateMO(ranPropertyEquipment);
+                    	ranPropertyEquipmentsList.add(ranPropertyEquipment);
 //                        row.createCell(0).setCellValue(e1.getValue().substring(0,managerObject));
 //                        row.createCell(1).setCellValue(e1.getValue().substring(managerObject,productName));
 //                        row.createCell(2).setCellValue("");
@@ -167,7 +144,6 @@ public class ReadAndAnalysisLog {
 //                        row.createCell(6).setCellValue(e1.getValue().substring(productNumber,productResivion));
 //                        row.createCell(7).setCellValue(e1.getValue().substring(productResivion,productionDate));
 //                        row.createCell(8).setCellValue(e1.getValue().substring(productionDate,serialNumber));
-                        rownum++;
                         }
                     }
                 }
@@ -191,26 +167,25 @@ public class ReadAndAnalysisLog {
                     }
 //                    row=sheet.createRow(rownum);
                     if(!e1.getValue().contains("Total")&&!e1.getValue().contains("==")&&!e1.getValue().contains("MO")){
-//                        System.out.print(e1.getValue().substring(0,managerObject));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(managerObject,productName));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productName,manufactureId));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(manufactureId,manufactureRevision));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(manufactureRevision,negotiaedBitRate));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(negotiaedBitRate,productNumber));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productNumber,productResivion));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productResivion,productionDate));
-//                        System.out.print("\t");
-//                        System.out.print(e1.getValue().substring(productionDate,serialNumber));
-//                        System.out.println("");row.createCell(0).setCellValue(e1.getValue().substring(0,managerObject));
                         if(!e1.getValue().substring(productionDate,serialNumber).trim().equals("")&&e1.getValue().substring(productionDate,serialNumber).trim()!=null){
 
+                        	RanPropertyEquipment ranPropertyEquipment=new RanPropertyEquipment();
+                        	ranPropertyEquipment.preInsert();
+                        	ranPropertyEquipment.setManagerobject(e1.getValue().substring(0,managerObject));
+                        	ranPropertyEquipment.setProductname(e1.getValue().substring(managerObject,productName));
+                        	ranPropertyEquipment.setManufacturerid(e1.getValue().substring(productName,manufactureId));
+                        	ranPropertyEquipment.setManufacturerrevision(e1.getValue().substring(manufactureId,manufactureRevision));
+                        	ranPropertyEquipment.setNegotiatedbitrate(e1.getValue().substring(manufactureRevision,negotiaedBitRate));
+                        	ranPropertyEquipment.setProductnumber(e1.getValue().substring(negotiaedBitRate,productNumber));
+                        	System.out.println(ranPropertyEquipment.getProductnumber());
+                        	ranPropertyEquipment.setProductionrevision(e1.getValue().substring(productNumber,productResivion));
+                        	ranPropertyEquipment.setProductiondate(e1.getValue().substring(productResivion,productionDate));
+                        	ranPropertyEquipment.setSerialnumber(e1.getValue().substring(productionDate,serialNumber));
+                        	ranPropertyEquipment.setLogdate(new SimpleDateFormat("yyyy-MM-dd").parse(logDate));
+                        	ranPropertyEquipment.setSitename(siteName);
+                        	ranPropertyEquipment.setStatus("1");
+                        	separateMO(ranPropertyEquipment);
+                        	ranPropertyEquipmentsList.add(ranPropertyEquipment);
 //                            row.createCell(0).setCellValue(e1.getValue().substring(0,managerObject));
 //                            row.createCell(1).setCellValue(e1.getValue().substring(managerObject,productName));
 //                            row.createCell(2).setCellValue(e1.getValue().substring(productName,manufactureId));
@@ -220,15 +195,43 @@ public class ReadAndAnalysisLog {
 //                            row.createCell(6).setCellValue(e1.getValue().substring(productNumber,productResivion));
 //                            row.createCell(7).setCellValue(e1.getValue().substring(productResivion,productionDate));
 //                            row.createCell(8).setCellValue(e1.getValue().substring(productionDate,serialNumber));
-                            rownum++;
                         }
                     }
                 }
             }
         }
-//        FileOutputStream fileOutputStream=new FileOutputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\"+UUID.randomUUID().toString().replaceAll("-","")+".xls");
-//        workbook.write(fileOutputStream);
-//        fileOutputStream.close();
+        return  ranPropertyEquipmentsList;
     }
+    public static void separateMO(RanPropertyEquipment ranPropertyEquipment) {
+		String moStr = ranPropertyEquipment.getManagerobject();
+		if(moStr.equals(FieldConstant.MO_CATEGORY_CABINET)){
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_CABINET);
+		} else if (moStr.equals(FieldConstant.MO_CATEGORY_BASE_BAND) || moStr.equals(FieldConstant.MO_CATEGORY_BASEBAND)){
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_BASEBAND);
+		} else if (moStr.contains(FieldConstant.MO_CATEGORY_SUPPORT)){
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_SUPPORT);
+		} else if (moStr.contains(FieldConstant.MO_CATEGORY_OPTICAL) || moStr.contains(FieldConstant.MO_CATEGORY_OPTICAL_MOUDLE)){
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_OPTICAL);
+		} else if (moStr.contains(FieldConstant.MO_CATEGORY_DOT)){
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_DOT);
+		} else {
+			ranPropertyEquipment.setMocategory(FieldConstant.MO_FLAG_RRU_IRU);
+		}
+	}
 
+
+/*    public static void main(String[] args) throws Exception{
+//        String fileName=System.getProperty("user.dir")+"\\src\\main\\resources\\FBJ085980.log";
+//        readUseLine(fileName);
+        Properties properties=new Properties();
+        properties.load(new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\log.properties"));
+        ArrayList<File> filePathArr=readDir(new File(properties.getProperty("path")));
+        for (File file:filePathArr) {
+            if(file.getName().endsWith("log")){
+                readUseLine(file.toString());
+
+            }
+
+        }
+    }*/
 }

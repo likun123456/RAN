@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,7 @@ import com.thinkgem.jeesite.common.constant.FieldConstant;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.propertycheck.entity.RanPropertyEquipment;
+import com.thinkgem.jeesite.modules.propertycheck.util.ReadAndAnalysisLog;
 import com.thinkgem.jeesite.modules.propertycheck.dao.RanPropertyEquipmentDao;
 
 /**
@@ -36,7 +38,10 @@ import com.thinkgem.jeesite.modules.propertycheck.dao.RanPropertyEquipmentDao;
 public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmentDao, RanPropertyEquipment> {
 	@Autowired
 	private RanPropertyEquipmentDao ranPropertyEquipmentDao;
-	private RanPropertyEquipment ranPropertyEquipment;
+//	@Autowired
+//	private RanPropertyEquipment ranPropertyEquipment;
+	private static Date LogDate;
+	private static String SiteName;
 	public RanPropertyEquipment get(String id) {
 		return super.get(id);
 	}
@@ -58,16 +63,27 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 	public void delete(RanPropertyEquipment ranPropertyEquipment) {
 		super.delete(ranPropertyEquipment);
 	}
-/*	@Transactional(readOnly=false)
-	public boolean insertBatch(List<RanPropertyEquipment> list) {
-		return ranPropertyEquipmentDao.insertBatch(list);
-	}*/
+
 	@Transactional(readOnly = false)
 //	@Scheduled(cron="0/30 * * * * ?")
 	public void batchInsert(){
+		
 		// 获取第一级路径
 		String logFileURL = Global.getConfig(FieldConstant.LOGFILE_URL_KEY);
-		String filesURL = getFilesURL(logFileURL);
+		try {
+			ArrayList<File> arr=ReadAndAnalysisLog.readDir(new File(logFileURL));
+			for (File file : arr) {
+				if(file.getName().endsWith("log")){
+	                List list=ReadAndAnalysisLog.readUseLine(file.toString());
+	                boolean result=ranPropertyEquipmentDao.insertBatch(list);
+	                System.out.println(result);
+
+	            }
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		/*String filesURL = getFilesURL(logFileURL);
 		
 		//获取日志文件路径
 		filesURL = getLogFilesURL(filesURL);
@@ -76,7 +92,8 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 		String substringDate = filesURL.substring(FieldConstant.SUBSTR_START_URL_DATESTR, FieldConstant.SUBSTR_END_URL_DATESTR);
 		try {
 			//日志创建时间
-			ranPropertyEquipment.setLogdate(sdf.parse(substringDate));
+			
+			LogDate=sdf.parse(substringDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,19 +104,20 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 			//开始读取日志内容，到那时忽略.txt 格式
 			if(logFileName.endsWith(FieldConstant.SUFFIX_LOG_FILES)){
 				//文件名就是站点名
-				ranPropertyEquipment.setSitename(logFileName.substring(0, logFileName.length()-4));
+//				ranPropertyEquipment.setSitename(logFileName.substring(0, logFileName.length()-4));
+				SiteName=logFileName.substring(0, logFileName.length()-4);
 				File needReadLog = new File(filesURL + File.separator + logFileName);
 				try(FileReader readLog = new FileReader(needReadLog);
 					BufferedReader br = new BufferedReader(readLog)
 				){
 					//处理日志文件数据并入库
-					handleLogData(br, ranPropertyEquipment);
+					handleLogData(br);
 				}catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
 			}
-		}
+		}*/
 	}
 	/**
 	 * Description: 处理日志文件数据并入库
@@ -110,9 +128,10 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 	 * @since 2018年11月8日: 下午2:04:08
 	 * Update By Chenquanwei 2018年11月8日: 下午2:04:08
 	 */
-	private void handleLogData(BufferedReader br, RanPropertyEquipment ranPropertyEquipment) throws IOException {
+	private void handleLogData(BufferedReader br) throws IOException {
 		//存放实体集合
 		List<RanPropertyEquipment> equipmentList = new ArrayList<>();
+		RanPropertyEquipment ranPropertyEquipment=new RanPropertyEquipment();
 		HashMap<String, Integer> fieldIndexMap = new HashMap<>();
 		boolean startFlag = false;
 		String line;
@@ -177,9 +196,16 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 					separateMO(ranPropertyEquipment);
 					
 					ranPropertyEquipment.setSerialnumber(line.substring(endIndex).trim());
+					try {
+						ranPropertyEquipment.setLogdate(LogDate);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ranPropertyEquipment.setSitename(SiteName);
 					equipmentList.add(ranPropertyEquipment);
 					
-					ranPropertyEquipmentDao.insertBatch(equipmentList);
+					
 					
 				} else if( i == 3){
 					fieldIndexMap.clear();
@@ -188,6 +214,10 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 				}
 			}
 		}
+		for (RanPropertyEquipment ranPropertyEquipment2 : equipmentList) {
+			System.out.println(ranPropertyEquipment2);
+		}
+		ranPropertyEquipmentDao.insertBatch(equipmentList);
 	}
 
 	/**

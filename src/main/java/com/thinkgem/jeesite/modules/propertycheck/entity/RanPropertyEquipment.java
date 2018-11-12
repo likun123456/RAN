@@ -4,6 +4,9 @@
 package com.thinkgem.jeesite.modules.propertycheck.entity;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
@@ -15,6 +18,8 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
  * @author 李昆
  * @version 2018-11-09
  */
+@Component
+@Scope("prototype")
 public class RanPropertyEquipment extends DataEntity<RanPropertyEquipment> {
 	
 	private static final long serialVersionUID = 1L;
