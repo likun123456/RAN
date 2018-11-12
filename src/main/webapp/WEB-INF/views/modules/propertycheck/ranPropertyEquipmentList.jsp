@@ -4,8 +4,15 @@
 <head>
 	<title>资产信息列表</title>
 	<meta name="decorator" content="default"/>
+	
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$(".siteNameInput").click(function(){
+				$(this).removeAttr("readonly");
+			});
+			$(".siteNameInput").blur(function(){
+				$(this).attr("readonly","readonly");
+			});
 			
 		});
 		function page(n,s){
@@ -17,6 +24,7 @@
 	</script>
 </head>
 <body>
+	
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/propertycheck/ranPropertyEquipment/">资产信息列表</a></li>
 		<shiro:hasPermission name="propertycheck:ranPropertyEquipment:edit"><li><a href="${ctx}/propertycheck/ranPropertyEquipment/form">资产信息添加</a></li></shiro:hasPermission>
@@ -31,7 +39,17 @@
 	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
 	  	<td width="100px">站点名</td>
 	  	<td>
-	  	FJB3323
+	  	<form:form id="searchForm" class=" form-search" >
+				<ul class="ul-form">
+				    <li>
+				        
+				        <input class="siteNameInput" type="text" name="" value="" style="width: 120px" readonly="readonly"/>  
+					</li>
+					
+					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="submit" value="查询"/></li>
+					<li class="clearfix"></li>
+				</ul>
+			</form:form>
 		</td>
 	  </tr>
 	  <tr>
@@ -117,7 +135,7 @@
 				        <label>结束时间：</label>
 				        <input type="text" style="width:160px;" class="Wdate" value="${endday}" id="txtEndDay" name="endday" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss' ,minDate:'#F{$dp.$D(\'txtBeginDay\')}'});" />
 					</li>
-					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="button" value="查询"/></li>
+					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="submit" value="查询"/></li>
 					<li class="clearfix"></li>
 				</ul>
 			</form:form>
@@ -136,13 +154,14 @@
 			<li class="clearfix"></li>
 		</ul>
 	</form:form> --%>
-	<form:form id="searchForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/insertBatch" method="post" class="breadcrumb form-search">
+<%-- 	<form:form id="searchForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/insertBatch" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="入库"/></li>
-			<li class="clearfix"></li>
+			 <li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="入库"/></li>
+			 
+			 <li class="clearfix"></li>
 		</ul>
-	</form:form>
-	<sys:message content="${message}"/>
+	</form:form> --%>
+	<%-- <sys:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
@@ -159,7 +178,7 @@
 			</tr>
 		</c:forEach>
 		</tbody>
-	</table>
+	</table> --%>
 	<div class="pagination">${page}</div>
 </body>
 </html>

@@ -109,7 +109,7 @@ public class RanPropertyEquipmentController extends BaseController {
 			list.add(r);
 		}
 		
-		ranPropertyEquipmentService.insertBatch(list);
+		ranPropertyEquipmentService.batchInsert();
 		addMessage(redirectAttributes, "删除对象类型成功");
 		return "redirect:"+Global.getAdminPath()+"/propertycheck/ranPropertyEquipment/?repage";
 	}

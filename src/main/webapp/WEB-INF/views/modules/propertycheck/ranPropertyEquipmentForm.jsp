@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>对象类型管理</title>
+	<title>资产信息管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -26,9 +26,10 @@
 	</script>
 </head>
 <body>
+	
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/propertycheck/ranPropertyEquipment/">对象类型列表</a></li>
-		<li class="active"><a href="${ctx}/propertycheck/ranPropertyEquipment/form?id=${ranPropertyEquipment.id}">对象类型<shiro:hasPermission name="propertycheck:ranPropertyEquipment:edit">${not empty ranPropertyEquipment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="propertycheck:ranPropertyEquipment:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/propertycheck/ranPropertyEquipment/">资产信息列表</a></li>
+		<li class="active"><a href="${ctx}/propertycheck/ranPropertyEquipment/form?id=${ranPropertyEquipment.id}">资产信息<shiro:hasPermission name="propertycheck:ranPropertyEquipment:edit">${not empty ranPropertyEquipment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="propertycheck:ranPropertyEquipment:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
