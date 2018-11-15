@@ -26,12 +26,12 @@
 	</script>
 </head>
 <body>
-	
-	<ul class="nav nav-tabs">
+
+	 <ul class="nav nav-tabs">
 		<li><a href="${ctx}/propertycheck/ranPropertyEquipment/">资产信息列表</a></li>
 		<li class="active"><a href="${ctx}/propertycheck/ranPropertyEquipment/form?id=${ranPropertyEquipment.id}">资产信息<shiro:hasPermission name="propertycheck:ranPropertyEquipment:edit">${not empty ranPropertyEquipment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="propertycheck:ranPropertyEquipment:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/save" method="post" class="form-horizontal">
+	<%-- <form:form id="inputForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
@@ -129,6 +129,186 @@
 			<shiro:hasPermission name="propertycheck:ranPropertyEquipment:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
-	</form:form>
+	</form:form> --%>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-0" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;0</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-1" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;1</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-2" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;2</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-3" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;3</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-4" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;4</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-5" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;5</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-6" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;6</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-7" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;7</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-8" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;8</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-9" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;9</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-a" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;a</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-b" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;b</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-c" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;c</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-d" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;d</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-e" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;e</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-f" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;f</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-g" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;g</span>
+										</a></br>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-h" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;h</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-i" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;i</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-j" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;j</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-k" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;k</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-l" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;l</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-m" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;m</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-n" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;n</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-o" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;o</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-p" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;p</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-q" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;q</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-r" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;r</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-s" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;s</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-t" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;t</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-u" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;u</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-v" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;v</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-w" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;w</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-x" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;x</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-y" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;y</span>
+										</a>
+<a class="menu" style="padding: 16px 14px 14px 10px;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}">
+										<%-- <i class="${menu.icon}"></i> --%>
+										<span class="icon-z" style="font-size:32px; margin-right:12px; margin-top:-5px"></span>
+										<span style="font-size: 14px; font-weight: bold;">&nbsp;z</span>
+										</a>
 </body>
 </html>

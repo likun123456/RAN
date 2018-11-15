@@ -19,5 +19,9 @@ import com.thinkgem.jeesite.modules.propertycheck.entity.RanPropertyEquipment;
 @MyBatisDao
 public interface RanPropertyEquipmentDao extends CrudDao<RanPropertyEquipment> {
 	boolean insertBatch(List<RanPropertyEquipment> list);
+	String getFirstSiteNameToShow();
+	List<String> getAllSiteName();
+	List<String> getAllLogDate();
+	List<RanPropertyEquipment> getInfoBySiteName(@Param("sitename") String siteName);
 	
 }

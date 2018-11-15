@@ -14,7 +14,10 @@
 				$(this).attr("readonly","readonly");
 			});
 			
+			
+			
 		});
+		
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
@@ -22,6 +25,22 @@
         	return false;
         }
 	</script>
+	<style type="text/css">
+		.xian {
+			background:url('${ctxStatic}/jerichotab/images/xian.png') bottom right no-repeat;
+			background-size:1px 80%;
+		}
+		.icon {
+			float:left;
+			font-size: 50px; 
+			margin-top: 8px; 
+			margin-left: 3px;
+		}
+		.table th, .table td { 
+		text-align: center;
+		
+		}
+	</style>
 </head>
 <body>
 	
@@ -36,104 +55,142 @@
 	  <!-- Table -->
 	  <table class="table table-responsive active">
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">站点名</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">站点名</td>
 	  	<td>
-	  	<form:form id="searchForm" class=" form-search" >
+	  	<form:form id="searchForm" action="${ctx}/propertycheck/ranPropertyEquipment/list" class=" form-search" >
 				<ul class="ul-form">
 				    <li>
-				        
-				        <input class="siteNameInput" type="text" name="" value="" style="width: 120px" readonly="readonly"/>  
+				    <c:set var="index" value="1"></c:set>
+				        <c:forEach items="${siteInfoList}" var="siteInfo">
+				        <c:if test="${index eq '1'}">
+				        <%-- <input id="siteName" class="siteNameInput" type="text" name="" value="${siteInfo.sitename}" style="width: 80%"  readonly="readonly"/>  
+				         --%>
+				          <select name="inputSiteName" id="pastScope" class="input-medium" style="width:100%">
+								 <%-- <option value="${siteInfo.sitename}">${siteInfo.sitename}</option> --%>
+								<c:forEach items="${allSiteName}" var="dict">
+								<c:choose>
+								<c:when test="${dict eq siteInfo.sitename}">
+								<option selected="selected" value="${dict}">${dict}</option>
+								</c:when>
+								<c:otherwise>
+								<option value="${dict}">${dict}</option>
+								</c:otherwise>
+								</c:choose>
+								</c:forEach>
+							</select>
+				         </c:if>
+				        <c:set var="index" value="0"></c:set>
+				        </c:forEach>
 					</li>
 					
-					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="submit" value="查询"/></li>
+					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="submit" value="查询" /></li>
 					<li class="clearfix"></li>
 				</ul>
 			</form:form>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">机框信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">机框信息</td>
 	  	<td>
-	  		<table class="table table-striped table-responsive  table-bordered">
+	  		<table  class="table table-striped table-responsive  table-bordered" >
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+	  			<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '1'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">RRU信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">RRU信息</td>
 	  	<td>
 	  		<table class="table table-striped table-responsive  table-bordered">
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+				<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '2'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">基带信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">基带信息</td>
 	  	<td>
 	  		<table class="table table-striped table-responsive  table-bordered">
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+				<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '3'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">支撑系统信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">支撑系统信息</td>
 	  	<td>
 	  		<table class="table table-striped table-responsive  table-bordered">
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+				<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '4'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">光模块信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">光模块信息</td>
 	  	<td>
 	  		<table class="table table-striped table-responsive  table-bordered">
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+				<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '5'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">DOT信息</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">DOT信息</td>
 	  	<td>
 	  		<table class="table table-striped table-responsive  table-bordered">
 	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
-	  			<tr><td>MO</td><td>产品名称</td><td>产品号码</td><td>产品版本</td><td>生产日期</td><td>产品串号</td></tr>
+				<c:forEach items="${siteInfoList}" var="siteInfo1">
+	  			<c:if test="${siteInfo1.mocategory eq '6'}">
+	  			<tr><td>${siteInfo1.managerobject}</td><td>${siteInfo1.productname}</td><td>${siteInfo1.productnumber}</td><td>${siteInfo1.productionrevision}</td><td>${siteInfo1.productiondate}</td><td>${siteInfo1.serialnumber}</td></tr>
+				</c:if>
+				</c:forEach>
 			</table>
 		</td>
 	  </tr>
 	  <tr>
-	  	<td width="80px"><img height="70px" width="50px"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
-	  	<td width="100px">板件更换记录查询</td>
+	  	<td width="8%"><img height="80%" width="80%"  alt="" src="${ctxStatic}/jerichotab/images/fst.png"> </td>
+	  	<td width="10%">板件更换记录查询</td>
 	  	<td>
 	  		<form:form id="searchForm" class="breadcrumb form-search" >
 				<ul class="ul-form">
 				    <li>
 				        <label>板件类型：</label>
-				        <input type="text" name="" value="" style="width: 120px" />  
+				        <input type="text" name="" value="" style="width:50%" />  
 					</li>
-					<li>
-				        <label>站点名：</label>
-				        <input type="text" value="" name="" style="width: 120px"/>
-					</li>
-					
 					<li id="startTimeLi">
 				        <label>开始时间：</label>
-				        <input type="text" style="width:160px;" class="Wdate" value="${beginday}" id="txtBeginDay" name="beginday" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss' ,maxDate:'#F{$dp.$D(\'txtEndDay\')}'});"/>
+				        <input type="text" style="" class="Wdate" value="${beginday}" id="txtBeginDay" name="beginday" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss' ,maxDate:'#F{$dp.$D(\'txtEndDay\')}'});"/>
 					</li>
 					<li id="endTimeLi">
 				        <label>结束时间：</label>
-				        <input type="text" style="width:160px;" class="Wdate" value="${endday}" id="txtEndDay" name="endday" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss' ,minDate:'#F{$dp.$D(\'txtBeginDay\')}'});" />
+				        <input type="text" style="" class="Wdate" value="${endday}" id="txtEndDay" name="endday" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss' ,minDate:'#F{$dp.$D(\'txtBeginDay\')}'});" />
 					</li>
 					<li class="btns"><input id="btnQuery" class="btn-new btn-search" type="submit" value="查询"/></li>
 					<li class="clearfix"></li>
@@ -146,21 +203,14 @@
 	
 	
 	
-	<%-- <form:form id="searchForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
+		<!-- <ul class="ul-form">
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
-		</ul>
-	</form:form> --%>
-<%-- 	<form:form id="searchForm" modelAttribute="ranPropertyEquipment" action="${ctx}/propertycheck/ranPropertyEquipment/insertBatch" method="post" class="breadcrumb form-search">
-		<ul class="ul-form">
-			 <li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="入库"/></li>
-			 
-			 <li class="clearfix"></li>
-		</ul>
-	</form:form> --%>
+		</ul> -->
+	</form:form>
 	<%-- <sys:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>

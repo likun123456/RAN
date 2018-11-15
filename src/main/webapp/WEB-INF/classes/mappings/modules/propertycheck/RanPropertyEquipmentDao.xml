@@ -30,6 +30,28 @@
 		<include refid="ranPropertyEquipmentJoins"/>
 		WHERE a.id = #{id}
 	</select>
+	<!--查询第一条数据的信息，读取站点信息，用来首页显示该站点信息  -->
+	<select id="getFirstSiteNameToShow" resultType="String">
+		SELECT 
+			sitename
+		FROM ran_property_equipment limit 1
+	</select>
+	<!--查询所有的站点名称，显示在下拉框中进行匹配  -->
+	<select id="getAllSiteName" resultType="String">
+		select sitename from ran_property_equipment group by sitename
+	</select>
+	<!--根据站点名查询资产信息  -->
+	<select id="getInfoBySiteName" resultType="RanPropertyEquipment">
+		SELECT 
+			<include refid="ranPropertyEquipmentColumns"/>
+		FROM ran_property_equipment a
+		<include refid="ranPropertyEquipmentJoins"/>
+		WHERE a.sitename = #{sitename}
+	</select>
+	<!--查询log的生成日期，与文件夹的日期名称对比判断是否读取过该文件夹  -->
+	<select id="getAllLogDate" resultType="String">
+		select logdate from ran_property_equipment group by logdate
+	</select>
 	
 	<select id="findList" resultType="RanPropertyEquipment">
 		SELECT 

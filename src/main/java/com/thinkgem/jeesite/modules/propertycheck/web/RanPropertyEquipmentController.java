@@ -54,8 +54,23 @@ public class RanPropertyEquipmentController extends BaseController {
 	@RequiresPermissions("propertycheck:ranPropertyEquipment:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(RanPropertyEquipment ranPropertyEquipment, HttpServletRequest request, HttpServletResponse response, Model model) {
+		List<RanPropertyEquipment> siteInfoList;
+		String inputSiteName=request.getParameter("inputSiteName");
 		Page<RanPropertyEquipment> page = ranPropertyEquipmentService.findPage(new Page<RanPropertyEquipment>(request, response), ranPropertyEquipment); 
 		model.addAttribute("page", page);
+		try{
+			siteInfoList=ranPropertyEquipmentService.getInfoBySiteName(inputSiteName.trim());
+			model.addAttribute("siteInfoList",siteInfoList);
+			
+		}catch(NullPointerException e) {
+			//返回根据第一个站点名查询到的站点信息
+			siteInfoList=ranPropertyEquipmentService.getInfoBySiteName(ranPropertyEquipmentService.getFirstSiteNameToShow());
+			model.addAttribute("siteInfoList",siteInfoList);
+			}
+		//获取所有的站点名用来显示在下拉框里提供选择		
+		List<String> allSiteName=ranPropertyEquipmentService.getAllSiteName();
+		
+		model.addAttribute("allSiteName",allSiteName);
 		return "modules/propertycheck/ranPropertyEquipmentList";
 	}
 

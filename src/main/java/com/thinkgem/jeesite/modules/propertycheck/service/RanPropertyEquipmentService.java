@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,14 +35,16 @@ import com.thinkgem.jeesite.modules.propertycheck.dao.RanPropertyEquipmentDao;
  * @version 2018-11-09
  */
 @Service
+@Lazy(false)
 @Transactional(readOnly = true)
 public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmentDao, RanPropertyEquipment> {
 	@Autowired
 	private RanPropertyEquipmentDao ranPropertyEquipmentDao;
-//	@Autowired
-//	private RanPropertyEquipment ranPropertyEquipment;
 	private static Date LogDate;
 	private static String SiteName;
+	private static int index=1;//下标
+	private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	private ArrayList<File> filePathArr=new ArrayList<File>();
 	public RanPropertyEquipment get(String id) {
 		return super.get(id);
 	}
@@ -63,23 +66,94 @@ public class RanPropertyEquipmentService extends CrudService<RanPropertyEquipmen
 	public void delete(RanPropertyEquipment ranPropertyEquipment) {
 		super.delete(ranPropertyEquipment);
 	}
+	public List<RanPropertyEquipment> getInfoBySiteName(String siteName){
+		return ranPropertyEquipmentDao.getInfoBySiteName(siteName);
+	}
+	public String getFirstSiteNameToShow() {
+		return ranPropertyEquipmentDao.getFirstSiteNameToShow();
+	}
+	public List<String> getAllSiteName() {
+		return ranPropertyEquipmentDao.getAllSiteName();
+	}
+	/**
+	 * @author BruceLee
+	 * @param filePath
+	 * @return
+	 * @throws Exception
+	 * 递归读取跟目录下的所有文件，并过滤掉读取过的文件夹
+	 */
+	public ArrayList<File> readDir(File filePath) throws  Exception{
+        File[] files=filePath.listFiles();
+        String[] strs=null;
+        String logDateInPath=null;
+        List<String> logDateInSqlList=null;
+        System.out.println("index"+index);
+       A: for (File f:files) {
+            if(f.isDirectory()){
+            		strs=f.getName().split("/");
+            		logDateInPath=strs[strs.length-1];//获取文件夹上的日期  
+            		logDateInSqlList=ranPropertyEquipmentDao.getAllLogDate();//获取数据库中的日期
+            	System.out.println(logDateInSqlList);
+            	if(logDateInSqlList==null||logDateInSqlList.equals("")||logDateInSqlList.size()==0) {//如果集合（数据库中的日期集合）为空，则是第一次入库
+            		readDir(f);
+            	}else {//否则不是第一次入库，进行判断文件是否入过库
+//            		System.out.println("97:else");
+            		B:for (String logDateInSql : logDateInSqlList) {
+//                		System.out.println("pathDate》》"+logDateInPath);
+//                		System.out.println("sqlDate》》"+logDateInSql);
+//                		System.out.println(sdf.parse(logDateInPath).compareTo(sdf.parse(logDateInSql)));
+                		try {
+                			if(sdf.parse(logDateInPath).compareTo(sdf.parse(logDateInSql))==0) {
+                				continue A;
+                			}else {
+                				if(index<logDateInSqlList.size()) {//判断最后一条是否相等
+                					continue B;
+                				}else {
+                					System.out.println("weitianjiade>>>"+f.getName());
+                					readDir(f);
+                				}
+                				
+                			}
+                    	}catch(Exception e) {
+                    		readDir(f);
+                    	}
+                		index++;
+    				}
+            	index=1;
+            	}
+            }
+            if (f.isFile()){
+            	System.out.println("进来了add");
+                filePathArr.add(f);
+            }
+        }
+        System.out.println("返回的数据>>>"+filePathArr);
+            return filePathArr;
+
+    }
 
 	@Transactional(readOnly = false)
 //	@Scheduled(cron="0/30 * * * * ?")
 	public void batchInsert(){
-		
+		System.out.println("定时任务");
+		ReadAndAnalysisLog r=new ReadAndAnalysisLog();
 		// 获取第一级路径
 		String logFileURL = Global.getConfig(FieldConstant.LOGFILE_URL_KEY);
 		try {
-			ArrayList<File> arr=ReadAndAnalysisLog.readDir(new File(logFileURL));
+			ArrayList<File> arr=readDir(new File(logFileURL));
 			for (File file : arr) {
+				System.out.println("文件》》》》"+file);
 				if(file.getName().endsWith("log")){
-	                List list=ReadAndAnalysisLog.readUseLine(file.toString());
+	                List<RanPropertyEquipment> list=r.readUseLine(file.toString());
 	                boolean result=ranPropertyEquipmentDao.insertBatch(list);
-	                System.out.println(result);
-
+	                
+//	                if(result==true)
+//	                {
+	                	list.clear();
+//	                }
 	            }
 			}
+			arr.clear();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
